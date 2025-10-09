@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_background"  android:padding="24dp"                       tools:context=".PlayMedia">
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_background"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.65"
+        app:resize_mode="fit"
+        app:show_timeout="0"
+        app:use_controller="false" />
+
+    <TextView
+        android:id="@+id/media_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="@string/track_title"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_view" />
+
+    <TextView
+        android:id="@+id/media_artist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/artist_name"
+        android:textColor="@color/gray_text"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_title" />
+
+    <SeekBar
+        android:id="@+id/progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:progressTint="@color/blue_accent"
+        android:thumbTint="@color/blue_accent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_artist" />
+
+    <TextView
+        android:id="@+id/current_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0:00"
+        android:textColor="@color/gray_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3:45"
+        android:textColor="@color/gray_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+
+    <LinearLayout
+        android:id="@+id/media_controls"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/current_time">
+
+        <ImageButton
+            android:id="@+id/skip_backward_button"
+            style="@style/ControlButton"
+            android:layout_width="wrap_content"       android:layout_height="wrap_content"      android:layout_marginEnd="24dp"
+            android:contentDescription="@string/content_skip_backward"
+            android:src="@drawable/ic_skip_backward"
+            app:tint="@color/white" />
+
+        <ImageButton
+            android:id="@+id/play_pause_button"
+            style="@style/ControlButton.Primary"
+            android:layout_width="wrap_content"       android:layout_height="wrap_content"      android:contentDescription="@string/content_play_pause"
+            android:src="@drawable/ic_play" />
+
+        <ImageButton
+            android:id="@+id/skip_forward_button"
+            style="@style/ControlButton"
+            android:layout_width="wrap_content"       android:layout_height="wrap_content"      android:layout_marginStart="24dp"
+            android:contentDescription="@string/content_skip_forward"
+            android:src="@drawable/ic_skip_forward"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/media_controls">
+
+        <ImageButton
+            android:id="@+id/mute_toggle_button"
+            style="@style/ControlButton.Small"
+            android:layout_width="wrap_content"       android:layout_height="wrap_content"      android:contentDescription="@string/content_mute_toggle"
+            android:src="@drawable/ic_volume_up"
+            app:tint="@color/gray_text" />
+
+        <SeekBar
+            android:id="@+id/volume_slider"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:max="100"
+            android:progress="100"
+            android:progressTint="@color/blue_accent"
+            android:thumbTint="@color/blue_accent" />
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
