@@ -3,4 +3,14 @@
     <string name="your_playlists">Your Playlists</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logo">logo\n</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">login\n</string>
+    <string name="register">register</string>
+    <string name="signup_prompt">Don\'t have an account? <u>Sign up</u> </string>
+    <string name="email">Email</string>
+    <string name="confirm_password"> Confirm Password</string>
+    <string name="create_account">create account\n</string>
+    <string name="login_prompt">Already have an account? <u>Login</u></string>
 </resources>
