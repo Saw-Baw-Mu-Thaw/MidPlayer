@@ -17,19 +17,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        // 2. Find the button in the layout
-        Button startPlayerButton = findViewById(R.id.start_player_button);
-
-        // 3. Set the click listener to navigate to the PlayMedia screen
-        startPlayerButton.setOnClickListener(v -> {
-            // Create an Intent to start the PlayMedia activity
-            Intent playMediaIntent = new Intent(MainActivity.this, PlayMedia.class);
-
-            // Start the new activity
-            startActivity(playMediaIntent);
-
-            // NOTE: Do NOT call finish() here, as you want the user to be
-            // able to use the Back button to return to the MainActivity.
-        });
     }
 }
