@@ -8,10 +8,4 @@
         <item>2x</item>
     </string-array>
 
-    <string name="track_title">My Awesome Track</string>
-    <string name="artist_name">Cool Artist</string>
-    <string name="content_skip_backward">Skip Backward</string>
-    <string name="content_skip_forward">Skip Forward</string>
-    <string name="content_play_pause">Play/Pause</string>
-    <string name="content_mute_toggle">Mute Toggle</string>
 </resources>
