@@ -13,3 +13,17 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/AndroidProjectSystem.xml
+/.idea/gradle.xml
+/.idea/misc.xml
+/.idea/runConfigurations.xml
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_10_2025_6_26_PM_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_11_2025_11_07_AM_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2025_11_11_AM_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2025_11_32_AM_[Changes]/shelved.patch
+/.idea/studiobot.xml
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_10_2025_6_26_PM__Changes_.xml
+/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_11_2025_11_07_AM__Changes_.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2025_11_11_AM__Changes_.xml
+/.idea/shelf/Uncommitted_changes_before_Update_at_10_11_2025_11_32_AM__Changes_.xml
+/.idea/vcs.xml
