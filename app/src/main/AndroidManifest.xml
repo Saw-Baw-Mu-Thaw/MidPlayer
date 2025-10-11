@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MidPlayer">
         <activity
+            android:name=".AccountInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity

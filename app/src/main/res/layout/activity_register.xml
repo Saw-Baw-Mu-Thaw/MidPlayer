@@ -63,7 +63,7 @@
             android:id="@+id/btnCreateAccount"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/create_account"/>
+            android:text="@string/register"/>
 
         <TextView
             android:id="@+id/txtLoginSignup"

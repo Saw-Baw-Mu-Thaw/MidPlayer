@@ -6,11 +6,21 @@
     <string name="logo">logo\n</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="login">login\n</string>
-    <string name="register">register</string>
-    <string name="signup_prompt">Don\'t have an account? <u>Sign up</u> </string>
+    <string name="login">Login\n</string>
+    <string name="register">Register</string>
+    <string name="signup_prompt">Don\'t have an account? <u>Register</u> </string>
     <string name="email">Email</string>
     <string name="confirm_password"> Confirm Password</string>
-    <string name="create_account">create account\n</string>
     <string name="login_prompt">Already have an account? <u>Login</u></string>
+    <string name="Home">Home</string>
+    <string name="Playlists">Playlists</string>
+    <string name="app_logo">App Logo</string>
+    <string name="mid_player">MidPlayer</string>
+    <string name="search_bar">search bar</string>
+    <string name="your_info">Your info</string>
+    <string name="theme">Theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="logout">Logout</string>
+    <string name="delete_account">Delete Account</string>
 </resources>
