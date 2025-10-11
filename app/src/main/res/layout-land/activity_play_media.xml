@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:baselineAligned="false"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_logo" />
+
+        <TextView
+            android:id="@+id/songNameTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="3"
+            android:text="Clarity"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/searchSong"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_search" />
+
+        <ImageView
+            android:id="@+id/account"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_account" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/songNameAlbum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="Clarity"
+            android:textAlignment="center"
+            android:textSize="50sp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_album"
+            android:layout_marginRight="10dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- 2. Current Time Text (e.g., 0:45) -->
+        <TextView
+            android:id="@+id/current_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:paddingEnd="8dp"
+            android:text="0:00"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+        <!-- 3. The Seek Bar (Timeline) -->
+        <SeekBar
+            android:id="@+id/media_seek_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="25"
+            android:progressTint="#304FFE"
+            android:thumbTint="#304FFE" />
+
+        <!-- 4. Duration Text (e.g., 3:30) -->
+        <TextView
+            android:id="@+id/duration_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:text="3:30"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/favoriteSong"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:contentDescription="Play/Pause Button"
+            android:focusable="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_favorite"
+            app:tint="#304FFE" />
+
+        <ImageView
+            android:id="@+id/skipBack"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:contentDescription="Play/Pause Button"
+            android:focusable="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_previous"
+            app:tint="#304FFE" />
+
+        <ImageView
+            android:id="@+id/play_pause_button"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:contentDescription="Play/Pause Button"
+            android:focusable="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_play_arrow"
+            app:tint="#304FFE" />
+
+        <ImageView
+            android:id="@+id/skipForward"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:contentDescription="Play/Pause Button"
+            android:focusable="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_next"
+            app:tint="#304FFE" />
+
+
+        <!-- This is the Spinner using the string array from strings.xml -->
+        <Spinner
+            android:id="@+id/speedSelectionSpinner"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:background="#DDDDDD"
+            android:layout_weight="1"
+            android:entries="@array/playback_speeds"
+            android:padding="12dp"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FAFAFA"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/home"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:contentDescription="Home Button"
+            android:focusable="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_home"
+            app:tint="#304FFE" />
+
+        <ImageView
+            android:id="@+id/musicLibrary"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:contentDescription="Music Library"
+            android:focusable="true"
+            android:paddingEnd="10dp"
+            android:src="@drawable/ic_music_library"
+            app:tint="#304FFE" />
+
+    </LinearLayout>
+</LinearLayout>
