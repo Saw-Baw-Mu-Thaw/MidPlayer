@@ -23,7 +23,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="@string/logo"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/logo" />
 
         <EditText
             android:id="@+id/edtLoginUsername"
@@ -33,7 +33,7 @@
             android:autofillHints="username"
             android:hint="@string/username"
             android:inputType="text"
-            android:textColorHint="@color/cardview_dark_background"/>
+            android:textColorHint="@color/cardview_dark_background" />
 
         <EditText
             android:id="@+id/edtLoginPassword"
@@ -43,21 +43,29 @@
             android:hint="@string/password"
             android:autofillHints="password"
             android:inputType="textPassword"
-            android:textColorHint="@color/cardview_dark_background"/>
+            android:textColorHint="@color/cardview_dark_background" />
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="150dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="8dp">
 
-        <Button
-            android:id="@+id/btnRegister"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            style="?attr/materialButtonOutlinedStyle"
-            android:text="@string/register" />
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/login" />
 
+            <Button
+                android:id="@+id/btnRegister"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                style="?attr/materialButtonOutlinedStyle"
+                android:text="@string/register" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/txtSignup"
@@ -68,22 +76,8 @@
             android:textSize="12sp"
             android:clickable="true"
             android:focusable="true"
-            android:padding="10dp"/>
-
-
-
-
-
+            android:padding="10dp" />
 
     </LinearLayout>
-
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

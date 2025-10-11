@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".RegisterActivity">
 
     <LinearLayout
-        android:id="@+id/login"
+        android:id="@+id/register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -19,24 +19,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="@string/logo"
-            android:src="@drawable/logo"/>
-
         <EditText
-            android:id="@+id/edtLoginUsername"
+            android:id="@+id/edtRegisterUsername"
             android:minHeight="48dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:autofillHints="username"
             android:hint="@string/username"
+            android:autofillHints="username"
             android:inputType="text"
             android:textColorHint="@color/cardview_dark_background"/>
 
         <EditText
-            android:id="@+id/edtLoginPassword"
+            android:id="@+id/edtRegisterEmail"
+            android:minHeight="48dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:autofillHints="emailAddress"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/cardview_dark_background"/>
+
+        <EditText
+            android:id="@+id/edtRegisterPassword"
             android:minHeight="48dp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
@@ -45,26 +49,28 @@
             android:inputType="textPassword"
             android:textColorHint="@color/cardview_dark_background"/>
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="150dp"
+        <EditText
+            android:id="@+id/edtConfirmPassword"
+            android:minHeight="48dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="@string/login"/>
+            android:hint="@string/confirm_password"
+            android:autofillHints="password"
+            android:inputType="textPassword"
+            android:textColorHint="@color/cardview_dark_background"/>
 
         <Button
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnCreateAccount"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            style="?attr/materialButtonOutlinedStyle"
-            android:text="@string/register" />
-
+            android:text="@string/register"/>
 
         <TextView
-            android:id="@+id/txtSignup"
+            android:id="@+id/txtLoginSignup"
             android:minHeight="48dp"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/signup_prompt"
+            android:text="@string/login_prompt"
             android:textSize="12sp"
             android:clickable="true"
             android:focusable="true"
@@ -74,16 +80,6 @@
 
 
 
-
     </LinearLayout>
-
-
-
-
-
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
