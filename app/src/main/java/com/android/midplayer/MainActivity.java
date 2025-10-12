@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 if(checkUserLogin(username, password)) {
                     Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(MainActivity.this, SongsLibrary.class);
+                    Intent intent = new Intent(MainActivity.this, BaseActivity.class);
                     // pass username to next screen
                     startActivity(intent);
                     finish();
