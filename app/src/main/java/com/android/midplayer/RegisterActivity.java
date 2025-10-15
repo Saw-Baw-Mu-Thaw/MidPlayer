@@ -60,8 +60,6 @@ public class RegisterActivity extends AppCompatActivity {
                     saveUserData(username, email, password);
 
                     Intent intent = new Intent(RegisterActivity.this, BaseActivity.class);
-                    intent.putExtra("username", username);
-                    intent.putExtra("email", email);
                     startActivity(intent);
                     finish();
 
@@ -89,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
             FileOutputStream fos = openFileOutput("users.txt", Context.MODE_APPEND);
             OutputStreamWriter writer = new OutputStreamWriter(fos);
 
-            String userline = username + "," + email + "," + password;
+            String userline = username + "," + email + "," + password + "\n";
             writer.write(userline);
             writer.flush();
             writer.close();
@@ -97,6 +95,8 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(RegisterActivity.this, BaseActivity.class);
+            intent.putExtra("username", username);
+            intent.putExtra("email", email);
             startActivity(intent);
             finish();
         } catch (Exception e) {
