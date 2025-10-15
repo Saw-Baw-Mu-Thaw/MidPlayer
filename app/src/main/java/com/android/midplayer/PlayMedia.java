@@ -23,11 +23,15 @@ public class PlayMedia extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     private ImageView playPauseButton;
+    private ImageView nextSongButton;
+    private ImageView prevSongButton;
     private SeekBar mediaSeekBar;
 
+    private int currentSongId;
     private Spinner speedSpinner;
     private Handler seekBarHandler = new Handler();
     private TextView currentTimeText, durationTimeText;
+    private final int TOTAL_SONGS = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class PlayMedia extends AppCompatActivity {
         setContentView(R.layout.activity_play_media);
 
         playPauseButton = findViewById(R.id.playPauseButton);
+        nextSongButton = findViewById(R.id.skipForward);
+        prevSongButton = findViewById(R.id.skipBack);
         mediaSeekBar = findViewById(R.id.mediaSeekBar);
         currentTimeText = findViewById(R.id.currentTimeText);
         durationTimeText = findViewById(R.id.durationTimeText);
@@ -69,9 +75,9 @@ public class PlayMedia extends AppCompatActivity {
         Intent intent = getIntent();
 
         if (intent != null && intent.hasExtra("SONG_ID")) {
-            int songId = intent.getIntExtra("SONG_ID", -1);
-            if (songId != -1) {
-                playSongById(songId);
+            currentSongId = intent.getIntExtra("SONG_ID", -1);
+            if (currentSongId != -1) {
+                playSongById(currentSongId);
             }
         }
 
@@ -103,6 +109,34 @@ public class PlayMedia extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        //implement next song function
+        nextSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer != null) {
+                    currentSongId++;
+                    // If the next song ID exceeds the total, loop back to the first song
+                    if (currentSongId > TOTAL_SONGS) {
+                        currentSongId = 1;
+                    }
+                    playSongById(currentSongId);
+                }
+            }
+        });
+        //implement prev song function
+        prevSongButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer != null) {
+                    currentSongId--;
+                    if (currentSongId == 0) { // intent firstly check whether it is less than -1
+                        currentSongId = TOTAL_SONGS;
+                    }
+                    playSongById(currentSongId);
+                }
             }
         });
     }
