@@ -16,7 +16,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     EditText edtLoginUsername, edtLoginPassword;
     Button btnLoginRegister, btnLogin;
@@ -101,6 +101,4 @@ public class MainActivity extends AppCompatActivity {
         return false;
 
     }
-
-
 }
