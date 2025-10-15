@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PlaylistFragment extends Fragment {
@@ -46,10 +47,27 @@ public class PlaylistFragment extends Fragment {
 
 
 
-    public PlaylistFragment(List<Playlist> playlists){
-        this.playlists = playlists;
+    public PlaylistFragment(){
+
     }
 
+    public static PlaylistFragment newInstance(List<Playlist> playlists) {
+        ArrayList<Playlist> list = new ArrayList<>(playlists);
+        PlaylistFragment f = new PlaylistFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("playlists", list);
+        f.setArguments(args);
+        return f;
+
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null) {
+            playlists = (List<Playlist>) getArguments().getSerializable("playlists");
+        }
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -84,13 +102,13 @@ public class PlaylistFragment extends Fragment {
         if(is_portrait){
             playlistListView = view.findViewById(R.id.playlistListView);
 
-            adapter = new PlaylistListAdapter(mainActContext, R.layout.playlist_list_item, playlists, is_portrait);
+            adapter = new PlaylistListAdapter(mainActContext, R.layout.playlist_list_item, playlists);
             playlistListView.setAdapter(adapter);
         }
         else {
             playlistGridView = view.findViewById(R.id.playlistGridView);
 
-            adapter = new PlaylistListAdapter(mainActContext, R.layout.playlist_grid_item, playlists, is_portrait);
+            adapter = new PlaylistListAdapter(mainActContext, R.layout.playlist_grid_item, playlists);
             playlistGridView.setAdapter(adapter);
         }
 
@@ -126,4 +144,5 @@ public class PlaylistFragment extends Fragment {
             }
         });
     }
+
 }

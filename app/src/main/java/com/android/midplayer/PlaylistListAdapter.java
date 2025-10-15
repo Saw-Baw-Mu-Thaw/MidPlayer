@@ -3,6 +3,7 @@ package com.android.midplayer;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,12 +33,12 @@ public class PlaylistListAdapter extends ArrayAdapter<Playlist> {
 
     private boolean is_portrait;
 
-    public PlaylistListAdapter(@NonNull Context context, int resource, @NonNull List<Playlist> objects, boolean is_portrait) {
+    public PlaylistListAdapter(@NonNull Context context, int resource, @NonNull List<Playlist> objects) {
         super(context, resource, objects);
         listener = (PlaylistFragment.PlaylistFragListener) context;
         mainActContext = context;
         playlists = objects;
-        this.is_portrait = is_portrait;
+
     }
 
     @Override
@@ -48,7 +49,9 @@ public class PlaylistListAdapter extends ArrayAdapter<Playlist> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if (convertView == null) {
+        this.is_portrait = mainActContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+
+        if(convertView == null){
             LayoutInflater inflater = LayoutInflater.from(mainActContext);
 
             if(is_portrait){
@@ -56,8 +59,10 @@ public class PlaylistListAdapter extends ArrayAdapter<Playlist> {
             }else{
                 convertView =inflater.inflate(R.layout.playlist_grid_item, parent, false);
             }
-
         }
+
+
+
 
         View view = convertView;
         TextView playlistNameTextView = view.findViewById(R.id.playlistItemNameTextView);
@@ -127,23 +132,24 @@ public class PlaylistListAdapter extends ArrayAdapter<Playlist> {
             }
         });
 
-        if(is_portrait) {
-            LinearLayout playlistItem = view.findViewById(R.id.playlistItem);
-            playlistItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onPlaylistClick(playlists.get(position));
-                }
-            });
-        }else{
-            ImageView playlistItem = view.findViewById(R.id.playlistItem);
-            playlistItem.setOnClickListener(new View.OnClickListener() {
+        LinearLayout playlistItem = view.findViewById(R.id.playlistItem);
+        playlistItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onPlaylistClick(playlists.get(position));
+            }
+        });
+
+        if(!is_portrait){
+            ImageView playlistItemLogo = view.findViewById(R.id.playlistItemLogo);
+            playlistItemLogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onPlaylistClick(playlists.get(position));
                 }
             });
         }
+
 
         return convertView;
     }

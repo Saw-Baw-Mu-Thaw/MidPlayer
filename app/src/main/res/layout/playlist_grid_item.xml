@@ -5,13 +5,14 @@
     android:layout_height="wrap_content">
     
     <ImageView
-        android:id="@+id/playlistItem"
+        android:id="@+id/playlistItemLogo"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/music_note"
+        android:src="@drawable/ic_logo"
         android:layout_gravity="center"/>
 
     <LinearLayout
+        android:id="@+id/playlistItem"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
