@@ -13,13 +13,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.Buffer;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText edtLoginUsername, edtLoginPassword;
-    Button btnLoginRegister, btnLogin;
+    Button btnLogin;
     TextView txtSignup;
 
 
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
         edtLoginUsername = findViewById(R.id.edtLoginUsername);
         edtLoginPassword = findViewById(R.id.edtLoginPassword);
-        btnLoginRegister = findViewById(R.id.btnLoginRegister);
         btnLogin = findViewById(R.id.btnLogin);
         txtSignup = findViewById(R.id.txtSignup);
 
@@ -44,22 +45,13 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(MainActivity.this, BaseActivity.class);
-                    // pass username to next screen
+                    intent.putExtra("username", username);
                     startActivity(intent);
                     finish();
 
                 } else {
                     Toast.makeText(MainActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-
-        btnLoginRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -74,25 +66,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean checkUserLogin(String username, String password) {
+
+        username = username.trim();
+        password = password.trim();
+
+
         try {
-            InputStream inputStream = getResources().openRawResource(R.raw.user);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String storedUsername = parts[0].trim();
-                    String storedPassword = parts[2].trim();
+            BufferedReader[] readers = new BufferedReader[2];
 
-                    if(storedUsername.equals(username) && storedPassword.equals(password)) {
-                        reader.close();
-                        return true;
-                    }
-                }
+            File internalFile = new File(getFilesDir(), "users.txt");
+            if (internalFile.exists()) {
+                readers[0] = new BufferedReader(new InputStreamReader(openFileInput("users.txt")));
             }
 
-            reader.close();
+            readers[1] = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.users)));
+
+            for(BufferedReader reader : readers) {
+                if(reader == null)
+                    continue;
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 3) {
+                        String storedUsername = parts[0].trim();
+                        String storedPassword = parts[2].trim();
+
+                        if(storedUsername.equals(username) && storedPassword.equals(password)) {
+                            reader.close();
+                            return true;
+                        }
+                    }
+                }
+                reader.close();
+
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
