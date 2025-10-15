@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MidPlayer">
         <activity
-            android:name=".BaseActivity"
+            android:name=".PlayMedia"
             android:exported="false" />
         <activity
-            android:name=".PlayMedia"
+            android:name=".BaseActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
