@@ -30,6 +30,12 @@ public class BaseActivity extends FragmentActivity implements PlaylistFragment.P
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.baseActivityFragmentContainer, new SongsLibraryFragment())
+                    .commit();
+        }
+
         // write playlists xml file if it doesn't exist
         if (PlaylistReaderWriter.checkFileExists(BaseActivity.this)) {
             playlists = PlaylistReaderWriter.readPlaylistsXml(BaseActivity.this);
@@ -60,6 +66,7 @@ public class BaseActivity extends FragmentActivity implements PlaylistFragment.P
     }
 
 
+
     public void onPlaylistClick(Playlist playlist) {
         // launch the playlist detail fragment
         Toast.makeText(BaseActivity.this, "Playlist clicked", Toast.LENGTH_SHORT).show();
@@ -86,5 +93,4 @@ public class BaseActivity extends FragmentActivity implements PlaylistFragment.P
     public void onPlaylistCreate(List<Playlist> playlists) {
         PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this, playlists);
     }
-
 }

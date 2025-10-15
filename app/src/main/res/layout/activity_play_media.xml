@@ -180,17 +180,14 @@
             app:tint="#304FFE" />
 
 
-        <!-- This is the Spinner using the string array from strings.xml -->
         <Spinner
             android:id="@+id/speedSelectionSpinner"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:background="#DDDDDD"
             android:layout_weight="1"
-            android:entries="@array/playback_speeds"
             android:padding="12dp"
-            android:spinnerMode="dropdown"
-            />
+            android:spinnerMode="dropdown" />
     </LinearLayout>
 
     <LinearLayout

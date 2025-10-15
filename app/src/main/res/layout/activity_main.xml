@@ -51,12 +51,6 @@
             android:layout_height="wrap_content"
             android:text="@string/login"/>
 
-        <Button
-            android:id="@+id/btnLoginRegister"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            style="?attr/materialButtonOutlinedStyle"
-            android:text="@string/register" />
 
 
         <TextView
