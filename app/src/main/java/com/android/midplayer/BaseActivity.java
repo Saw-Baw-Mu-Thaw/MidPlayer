@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.Arrays;
 import java.util.List;
 
-public class BaseActivity extends FragmentActivity implements PlaylistFragment.PlaylistFragListener {
+public class BaseActivity extends AppCompatActivity implements PlaylistFragment.PlaylistFragListener {
 
     ImageView playlistButton;
     FragmentManager fragmentManager;
@@ -49,7 +49,7 @@ public class BaseActivity extends FragmentActivity implements PlaylistFragment.P
 
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
-        playlistFragment = new PlaylistFragment(playlists);
+        playlistFragment = PlaylistFragment.newInstance(playlists);
 
         playlistButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +65,10 @@ public class BaseActivity extends FragmentActivity implements PlaylistFragment.P
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     public void onPlaylistClick(Playlist playlist) {
         // launch the playlist detail fragment
