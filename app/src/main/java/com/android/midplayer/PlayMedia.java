@@ -2,6 +2,8 @@ package com.android.midplayer;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +41,12 @@ public class PlayMedia extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_media);
+
+        ImageView musicPlayerGif = findViewById(R.id.musicPlayerGif);
+        Glide.with(this)
+                .asGif()  // Explicitly tell Glide to load as a GIF
+                .load(R.drawable.music_play)
+                .into(musicPlayerGif);
 
         playPauseButton = findViewById(R.id.playPauseButton);
         nextSongButton = findViewById(R.id.skipForward);
@@ -62,8 +72,29 @@ public class PlayMedia extends AppCompatActivity {
         speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+
+
                 String selectedSpeed = parent.getItemAtPosition(position).toString();
-                Toast.makeText(PlayMedia.this, "Selected: " + selectedSpeed, Toast.LENGTH_SHORT).show();
+                float speed = 1.0f; // Default speed
+
+                // Use a switch to convert the string to a float
+                switch (selectedSpeed) {
+                    case "0.5x":
+                        speed = 0.5f;
+                        break;
+                    case "1.5x":
+                        speed = 1.5f;
+                        break;
+                    // "1.0x (Normal)" will fall through to the default
+                    default:
+                        speed = 1.0f;
+                        break;
+                }
+
+                // Call the function to change the speed
+                changePlayerSpeed(speed);
+
             }
 
             @Override
@@ -87,10 +118,17 @@ public class PlayMedia extends AppCompatActivity {
                     mediaPlayer.pause();
                     playPauseButton.setImageResource(R.drawable.ic_play_arrow);
                     seekBarHandler.removeCallbacks(updateSeekBar);
+                    Glide.with(this).clear(musicPlayerGif); // pause gif play
                 } else {
                     mediaPlayer.start();
+
+
                     playPauseButton.setImageResource(R.drawable.ic_pause);
                     updateSeekBar.run();
+                    // start gif play
+                    Glide.with(this)
+                            .load(R.drawable.music_play)
+                            .into(musicPlayerGif);
                 }
             }
         });
@@ -197,5 +235,28 @@ public class PlayMedia extends AppCompatActivity {
         }
         seekBarHandler.removeCallbacks(updateSeekBar);
         super.onDestroy();
+    }
+
+    private void changePlayerSpeed(float speed) {
+        // This method is only available on API 23 (Marshmallow) and above.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                if (mediaPlayer != null) {
+                    PlaybackParams params = new PlaybackParams();
+                    params.setSpeed(speed);
+
+                    // This keeps the pitch normal, so it doesn't sound like a "chipmunk"
+                    params.setPitch(1.0f);
+
+                    mediaPlayer.setPlaybackParams(params);
+                }
+            } catch (Exception e) {
+                // This can happen if the media player is in an invalid state
+                Log.e("MediaPlayer", "Failed to set playback speed: " + e.getMessage());
+            }
+        } else {
+            // Show a message to the user that their phone is too old for this feature
+            Log.w("MediaPlayer", "Playback speed not supported on this API level.");
+        }
     }
 }
