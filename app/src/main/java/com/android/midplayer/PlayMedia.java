@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +39,12 @@ public class PlayMedia extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_media);
+
+        ImageView musicPlayerGif = findViewById(R.id.musicPlayerGif);
+        Glide.with(this)
+                .asGif()  // Explicitly tell Glide to load as a GIF
+                .load(R.drawable.music_play)
+                .into(musicPlayerGif);
 
         playPauseButton = findViewById(R.id.playPauseButton);
         nextSongButton = findViewById(R.id.skipForward);
@@ -87,10 +95,15 @@ public class PlayMedia extends AppCompatActivity {
                     mediaPlayer.pause();
                     playPauseButton.setImageResource(R.drawable.ic_play_arrow);
                     seekBarHandler.removeCallbacks(updateSeekBar);
+                    Glide.with(this).clear(musicPlayerGif); // pause gif play
                 } else {
                     mediaPlayer.start();
                     playPauseButton.setImageResource(R.drawable.ic_pause);
                     updateSeekBar.run();
+                    // start gif play
+                    Glide.with(this)
+                            .load(R.drawable.music_play)
+                            .into(musicPlayerGif);
                 }
             }
         });
