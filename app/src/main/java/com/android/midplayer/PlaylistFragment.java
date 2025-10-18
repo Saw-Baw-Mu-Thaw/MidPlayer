@@ -31,7 +31,7 @@ public class PlaylistFragment extends Fragment {
         public void onPlaylistRemove(int position);
         public void onPlayAllSongs(Playlist playlist);
         public void onPlaylistRenamed(List<Playlist> playlists);
-        public void onPlaylistCreate(List<Playlist> playlists);
+        public void onPlaylistCreate(Playlist playlist);
     }
 
     PlaylistFragListener listener;
@@ -127,7 +127,7 @@ public class PlaylistFragment extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Playlist new_playlist = new Playlist(playlistNameEditText.getText().toString(), 0, new AudioTrack[0]);
                         playlists.add(new_playlist);
-                        listener.onPlaylistCreate(playlists);
+                        listener.onPlaylistCreate(new_playlist);
                         adapter.notifyDataSetChanged();
                     }
                 });

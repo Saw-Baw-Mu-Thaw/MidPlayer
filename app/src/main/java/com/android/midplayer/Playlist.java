@@ -1,6 +1,8 @@
 package com.android.midplayer;
 
-public class Playlist {
+import java.io.Serializable;
+
+public class Playlist implements Serializable {
     private String name;
     private int number_of_songs;
     private AudioTrack[] song_ids;
