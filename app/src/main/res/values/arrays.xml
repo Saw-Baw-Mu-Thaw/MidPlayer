@@ -1,11 +1,10 @@
 <resources>
     <string-array name="playback_speeds">
+        <item>1x</item>
         <item>0.5x</item>
         <item>0.75x</item>
-        <item>1x</item>
         <item>1.25x</item>
         <item>1.5x</item>
-        <item>2x</item>
     </string-array>
 
 </resources>
