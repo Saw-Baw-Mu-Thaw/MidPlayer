@@ -23,4 +23,5 @@
     <string name="dark">Dark</string>
     <string name="logout">Logout</string>
     <string name="delete_account">Delete Account</string>
+    <string name="nothing_is_playing">Nothing is playing</string>
 </resources>

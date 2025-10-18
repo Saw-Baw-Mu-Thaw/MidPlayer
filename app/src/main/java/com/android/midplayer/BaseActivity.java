@@ -17,13 +17,15 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.Arrays;
 import java.util.List;
 
-public class BaseActivity extends AppCompatActivity implements PlaylistFragment.PlaylistFragListener {
+public class BaseActivity extends AppCompatActivity implements PlaylistFragment.PlaylistFragListener,
+BackgroundPlayerService.bgPlayerListener{
 
     ImageView playlistButton;
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
     PlaylistFragment playlistFragment;
     List<Playlist> playlists;
+    SmallPlayerFragment smallPlayerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,12 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
 
         fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
+
+        smallPlayerFragment = SmallPlayerFragment.newInstance();
+        fragmentManager.beginTransaction()
+                .replace(R.id.baseActivitySmallPlayerFragmentContainer, smallPlayerFragment)
+                .commit();
+
         playlistFragment = PlaylistFragment.newInstance(playlists);
 
         playlistButton.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +71,8 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
                 }
             }
         });
+
+
     }
 
     @Override
@@ -72,7 +82,9 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
 
     public void onPlaylistClick(Playlist playlist) {
         // launch the playlist detail fragment
+
         Toast.makeText(BaseActivity.this, "Playlist clicked", Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -86,6 +98,7 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
     public void onPlayAllSongs(Playlist playlist) {
         // give media player to play all songs in the playlist
         Toast.makeText(BaseActivity.this, "Playing playlist", Toast.LENGTH_SHORT).show();
+        smallPlayerFragment.playSongs(playlist.getSong_ids());
     }
 
     @Override
@@ -93,7 +106,18 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
         PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this, playlists);
     }
 
-    public void onPlaylistCreate(List<Playlist> playlists) {
+    public void onPlaylistCreate(Playlist playlist) {
+        playlists.add(playlist);
         PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this, playlists);
+    }
+
+    @Override
+    public void onPlay(String trackName) {
+        smallPlayerFragment.setPlayerTitle(trackName);
+    }
+
+    @Override
+    public void onFinish() {
+        smallPlayerFragment.onSmallPlayerFinished();
     }
 }
