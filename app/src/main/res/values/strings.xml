@@ -11,7 +11,7 @@
     <string name="signup_prompt">Don\'t have an account? <u>Register</u> </string>
     <string name="email">Email</string>
     <string name="confirm_password"> Confirm Password</string>
-    <string name="login_prompt">Already have an account? <u>Login</u></string>
+    <string name="login_prompt">Already have an account? <u>Login</u> </string>
     <string name="Home">Home</string>
     <string name="Playlists">Playlists</string>
     <string name="app_logo">App Logo</string>

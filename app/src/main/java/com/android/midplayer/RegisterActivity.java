@@ -60,6 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
                     saveUserData(username, email, password);
 
                     Intent intent = new Intent(RegisterActivity.this, BaseActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", email);
                     startActivity(intent);
                     finish();
 
@@ -72,7 +74,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -95,8 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(RegisterActivity.this, BaseActivity.class);
-            intent.putExtra("username", username);
-            intent.putExtra("email", email);
             startActivity(intent);
             finish();
         } catch (Exception e) {

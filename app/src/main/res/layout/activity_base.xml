@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".BaseActivity"
-    android:background="@color/white">
+    android:background="?android:attr/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_logo"
-            app:tint = "#000000"/>
+            app:tint="?attr/colorControlNormal"/>
 
         <TextView
             android:id="@+id/songNameTitle"
@@ -30,7 +30,7 @@
             android:text="Clarity"
             android:textAlignment="center"
             android:textSize="30sp"
-            android:textColor="@color/black"/>
+            android:textColor="?android:attr/textColorPrimary"/>
 
         <ImageView
             android:id="@+id/searchSong"
@@ -38,14 +38,14 @@
             android:layout_height="50dp"
             android:layout_marginRight="20dp"
             android:src="@drawable/ic_search"
-            app:tint = "#000000"/>
+            app:tint="?attr/colorOnBackground"/>
 
         <ImageView
-            android:id="@+id/account"
+            android:id="@+id/ivAccount"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_account"
-            app:tint = "#000000"/>
+            app:tint="?attr/colorControlNormal"/>
 
     </LinearLayout>
 

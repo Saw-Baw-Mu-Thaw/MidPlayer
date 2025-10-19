@@ -1,5 +1,8 @@
 package com.android.midplayer;
 
+import static androidx.core.graphics.drawable.DrawableCompat.applyTheme;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -7,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,10 +29,16 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
     PlaylistFragment playlistFragment;
     List<Playlist> playlists;
 
+    //account info
+    ImageView ivAccount;
+    String username, email;
+    public static boolean isDarkMode = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        applyTheme();
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -51,6 +61,24 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
         transaction = fragmentManager.beginTransaction();
         playlistFragment = PlaylistFragment.newInstance(playlists);
 
+        // account info
+        ivAccount = findViewById(R.id.ivAccount);
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("username");
+        email = intent.getStringExtra("email");
+
+        ivAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(BaseActivity.this, "My Account", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(BaseActivity.this, AccountInfoActivity.class);
+                intent.putExtra("username", username);
+                intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
+
         playlistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,6 +93,18 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
         });
     }
 
+    private void applyTheme() {
+        boolean isDarkMode = getSharedPreferences("theme", MODE_PRIVATE)
+                .getBoolean("dark_mode", false);
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -75,13 +115,11 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
         Toast.makeText(BaseActivity.this, "Playlist clicked", Toast.LENGTH_SHORT).show();
     }
 
-
     public void onPlaylistRemove(int position) {
         // remove the playlist sent from here
         playlists.remove(position);
         PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this, playlists);
     }
-
 
     public void onPlayAllSongs(Playlist playlist) {
         // give media player to play all songs in the playlist
@@ -97,3 +135,5 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
         PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this, playlists);
     }
 }
+
+

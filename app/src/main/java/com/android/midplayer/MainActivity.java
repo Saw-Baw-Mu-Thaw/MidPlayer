@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity{
     EditText edtLoginUsername, edtLoginPassword;
     Button btnLogin;
     TextView txtSignup;
+    String email;
 
 
     @Override
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity{
 
                     Intent intent = new Intent(MainActivity.this, BaseActivity.class);
                     intent.putExtra("username", username);
+                    intent.putExtra("email", email);
                     startActivity(intent);
                     finish();
 
@@ -91,9 +93,11 @@ public class MainActivity extends AppCompatActivity{
                     String[] parts = line.split(",");
                     if (parts.length == 3) {
                         String storedUsername = parts[0].trim();
+                        String storedEmail = parts[1].trim();
                         String storedPassword = parts[2].trim();
 
                         if(storedUsername.equals(username) && storedPassword.equals(password)) {
+                            email = storedEmail;
                             reader.close();
                             return true;
                         }
