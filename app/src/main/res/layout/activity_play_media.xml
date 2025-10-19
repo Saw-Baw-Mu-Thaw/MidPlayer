@@ -31,13 +31,6 @@
             android:textSize="30sp"
             android:textColor="@color/black"/>
 
-        <ImageView
-            android:id="@+id/searchSong"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_search"
-            app:tint = "#000000"/>
 
         <ImageView
             android:id="@+id/account"
