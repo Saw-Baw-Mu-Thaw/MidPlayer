@@ -72,13 +72,6 @@
                 android:text="@string/login"
                 android:textColor="@color/white" />
 
-            <Button
-                android:id="@+id/btnLoginRegister"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                style="?attr/materialButtonOutlinedStyle"
-                android:text="@string/register"
-                android:textColor="@color/white" />
         </LinearLayout>
 
         <TextView

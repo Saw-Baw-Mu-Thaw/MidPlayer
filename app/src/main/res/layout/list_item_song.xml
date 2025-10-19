@@ -3,16 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:padding="12dp"
+    android:background="@color/card_background"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/songTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Song Title"
-        android:textSize="18sp"
-        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary"
         android:textStyle="bold" />
 
     <TextView
@@ -20,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Artist Name"
-        android:textSize="14sp"
-        android:textColor="#444444" />
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary" />
 
 </LinearLayout>

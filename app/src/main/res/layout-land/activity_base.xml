@@ -12,20 +12,21 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="6dp"
+        android:layout_weight="0"
+        app:cardElevation="4dp"
         app:cardCornerRadius="0dp"
-        app:cardBackgroundColor="@color/card_background"
-        android:padding="8dp">
+        app:cardBackgroundColor="@color/card_background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_music_note"
                 app:tint="@color/white"/>
@@ -34,29 +35,30 @@
                 android:id="@+id/songNameTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
                 android:text="Clarity"
                 android:textAlignment="center"
-                android:textSize="26sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/searchSong"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_marginEnd="12dp"
-                app:cardCornerRadius="27.5dp"
-                android:contentDescription="search song"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="22.5dp"
+                app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/input_background"
+                android:contentDescription="search song"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:id="@+id/searchSong"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_search"
                     app:tint="@color/text_secondary"/>
@@ -64,22 +66,24 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/ivAccount"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                app:cardCornerRadius="27.5dp"
-                android:contentDescription="account logo"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                app:cardCornerRadius="22.5dp"
+                app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/input_background"
+                android:contentDescription="account logo"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_person"
                     app:tint="@color/text_secondary"/>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -87,32 +91,31 @@
         android:id="@+id/baseActivityFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_weight="1"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/baseActivitySmallPlayerFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"/>
+        android:layout_weight="0"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         app:cardElevation="8dp"
         app:cardCornerRadius="0dp"
-        app:cardBackgroundColor="@color/card_background"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingStart="36dp"
-        android:paddingEnd="36dp">
+        app:cardBackgroundColor="@color/card_background">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp">
 
             <LinearLayout
                 android:id="@+id/home"
@@ -123,21 +126,21 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:background="?attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_home"
-                    app:tint="@color/primary"/>
+                    app:tint="@color/text_secondary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
-                    android:textSize="13sp"
-                    android:textColor="@color/primary"
+                    android:textSize="12sp"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
 
@@ -204,23 +207,24 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:background="?attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:src="@drawable/ic_music_library"
                     app:tint="@color/text_secondary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Library"
-                    android:textSize="13sp"
+                    android:text="Playlists"
+                    android:textSize="12sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
