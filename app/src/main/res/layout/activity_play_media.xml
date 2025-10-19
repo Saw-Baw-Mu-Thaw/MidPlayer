@@ -21,7 +21,7 @@
             app:tint = "#000000"/>
 
         <TextView
-            android:id="@+id/songNameTitle"
+            android:id="@+id/songNameMini"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -31,13 +31,6 @@
             android:textSize="30sp"
             android:textColor="@color/black"/>
 
-        <ImageView
-            android:id="@+id/searchSong"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_search"
-            app:tint = "#000000"/>
 
         <ImageView
             android:id="@+id/account"
@@ -54,7 +47,7 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/songNameAlbum"
+            android:id="@+id/songNameBig"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

@@ -22,6 +22,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackParameters; // EXO: Use ExoPlayer's parameters
 import com.google.android.exoplayer2.Player; // EXO: Use ExoPlayer's base Player interface
 
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -35,10 +36,14 @@ public class PlayMedia extends AppCompatActivity {
     private SeekBar mediaSeekBar;
 
     private int currentSongId;
+
+
     private Spinner speedSpinner;
     private Handler seekBarHandler = new Handler();
     private TextView currentTimeText, durationTimeText;
-    private final int TOTAL_SONGS = 11;
+    private List<AudioTrack> allSongs;
+    private int TOTAL_SONGS;
+    private TextView songNameMini, songNameBig;
     private ImageView musicPlayerGif; // EXO: Made this a class member for access in listener
 
     @Override
@@ -46,6 +51,11 @@ public class PlayMedia extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_media);
 
+        songNameMini = findViewById(R.id.songNameMini);
+        songNameBig = findViewById(R.id.songNameBig);
+
+        allSongs = SongsLibrary.getInitialSongList();
+        TOTAL_SONGS = allSongs.size();
         // EXO: Assign to class member
         musicPlayerGif = findViewById(R.id.musicPlayerGif);
         Glide.with(this)
@@ -98,11 +108,37 @@ public class PlayMedia extends AppCompatActivity {
         initializePlayer();
 
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("SONG_ID")) {
+        if (intent != null) {
             currentSongId = intent.getIntExtra("SONG_ID", -1);
+            String songTitle = intent.getStringExtra("SONG_TITLE");
+            String artistName = intent.getStringExtra("ARTIST_NAME");
+
             if (currentSongId != -1) {
+                // This will now play the song AND update the text
                 playSongById(currentSongId);
+
+            } else {
+                // Handle case where activity is launched directly
+                if (songTitle == null) songTitle = "Unknown Title";
+                if (artistName == null) artistName = "Unknown Artist";
+                songNameMini.setText(songTitle);
+                songNameBig.setText(songTitle);
             }
+
+            // --- MODIFICATION ---
+            // 5. This setup is now handled by playSongById,
+            //    but we keep it as a fallback if no ID was passed.
+            if (currentSongId == -1) {
+                if (songTitle == null) songTitle = "Unknown Title";
+                songNameMini.setText(songTitle);
+                songNameBig.setText(songTitle);
+            }
+            if (currentSongId == -1) {
+                if (songTitle == null) songTitle = "Unknown Title";
+                songNameMini.setText(songTitle);
+                songNameBig.setText(songTitle);
+            }
+
         }
 
         playPauseButton.setOnClickListener(v -> {
@@ -202,10 +238,42 @@ public class PlayMedia extends AppCompatActivity {
         });
     }
 
+    // ADD THIS NEW HELPER METHOD
+    private AudioTrack getTrackById(int songId) {
+        // Loop through your list (which starts at index 0)
+        for (AudioTrack track : allSongs) {
+            // Find the track where the ID matches
+            if (track.getId() == songId) {
+                return track;
+            }
+        }
+        // If no song is found (e.g., ID 0 or > 21), return null
+        return null;
+    }
     public void playSongById(int songId) {
         if (exoPlayer == null) {
             initializePlayer();
         }
+
+        // --- MODIFICATION START ---
+        // Use the helper method to get the song's details
+        AudioTrack currentTrack = getTrackById(songId);
+
+        // Check if the track was found
+        if (currentTrack != null) {
+            // Set the text for the new song
+            songNameMini.setText(currentTrack.getTitle());
+            songNameBig.setText(currentTrack.getTitle());
+        } else {
+            // Fallback in case of a bad ID
+            songNameMini.setText("Unknown Title");
+            songNameBig.setText("Unknown Title");
+            Log.e("PlayMedia", "Could not find track with ID: " + songId);
+            // You might want to stop playback here or play song 1
+            return; // Exit if no song found
+        }
+        // --- MODIFICATION END ---
+
 
         // EXO: Build a URI for the raw resource
         String resourceName = "song" + songId;
@@ -223,9 +291,11 @@ public class PlayMedia extends AppCompatActivity {
             // All UI updates (duration, button icon) are now handled by the listener
         } else {
             Log.e("ExoPlayer", "Raw resource not found for song ID: " + songId);
+            // If the resource isn't found, also update the text
+            songNameMini.setText("Resource Missing");
+            songNameBig.setText("Resource Missing");
         }
     }
-
     private Runnable updateSeekBar = new Runnable() {
         public void run() {
             // EXO: Check exoPlayer and isPlaying
