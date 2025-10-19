@@ -28,6 +28,10 @@ BackgroundPlayerService.bgPlayerListener, PlaylistDetailFragment.PlaylistDetailL
 SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListener {
 
     LinearLayout playlistButton;
+
+    LinearLayout favoriteListButton;
+    LinearLayout artistListButton;
+    LinearLayout genreListButton;
     LinearLayout homeButton;
     FragmentManager fragmentManager;
     List<Playlist> playlists;
@@ -72,6 +76,10 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
 
         // setting up playlist fragment
         playlistButton = findViewById(R.id.musicLibrary);
+        favoriteListButton = findViewById(R.id.favorites);
+        artistListButton = findViewById(R.id.artists);
+        genreListButton = findViewById(R.id.genres);
+
         homeButton = findViewById(R.id.home);
 
         fragmentManager = getSupportFragmentManager();
@@ -114,6 +122,15 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
             public void onClick(View view) {
                 fragmentManager.beginTransaction()
                         .replace(R.id.baseActivityFragmentContainer, new SongsLibraryFragment())
+                        .commit();
+            }
+        });
+
+        favoriteListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.baseActivityFragmentContainer, new FavoriteFragment())
                         .commit();
             }
         });
