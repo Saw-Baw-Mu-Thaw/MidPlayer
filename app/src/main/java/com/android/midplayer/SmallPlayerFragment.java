@@ -4,56 +4,52 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.os.IBinder;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.support.v4.media.MediaBrowserCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-
-public class SmallPlayerFragment extends Fragment{
+public class SmallPlayerFragment extends Fragment {
 
     public interface SmallPlayerListener {
-        public void onSmallPlayerClicked(AudioTrack[] tracks, int index);
+        void onSmallPlayerClicked(AudioTrack[] tracks, int index);
     }
+
     private List<AudioTrack> tracks;
-    private int index;
-    private int duration;
     private TextView smallPlayerTextView;
     private ImageButton smallPlayerPlayButton;
     private Context mainActContext;
     private SmallPlayerListener listener;
 
+    private List<AudioTrack> pendingTracks;
     private BackgroundPlayerService backgroundPlayerService;
-
     private boolean isBound = false;
 
-    final private ServiceConnection connection = new ServiceConnection() {
+    private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             BackgroundPlayerService.MyBinder binder = (BackgroundPlayerService.MyBinder) iBinder;
             backgroundPlayerService = binder.getService();
             isBound = true;
 
-            backgroundPlayerService.setListener(getContext());
-
-            // can't save state to continue playback
+            // If there are tracks waiting to be played, play them now.
+            if (pendingTracks != null) {
+                backgroundPlayerService.setListener(getContext());
+                backgroundPlayerService.playSongs(pendingTracks);
+                smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
+                pendingTracks = null; // Clear the pending list
+            }
         }
 
         @Override
@@ -63,28 +59,21 @@ public class SmallPlayerFragment extends Fragment{
         }
     };
 
-
     public SmallPlayerFragment() {
         // Required empty public constructor
-    }
-
-    public static SmallPlayerFragment newInstance() {
-        return new SmallPlayerFragment();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActContext = context;
-        if(context instanceof SmallPlayerListener) {
+        if (context instanceof SmallPlayerListener) {
             listener = (SmallPlayerListener) context;
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_small_player, container, false);
     }
 
@@ -95,53 +84,44 @@ public class SmallPlayerFragment extends Fragment{
         smallPlayerTextView = view.findViewById(R.id.smallPlayerTextView);
         smallPlayerPlayButton = view.findViewById(R.id.smallPlayerPlayButton);
 
+        // Bind to the service
         Intent intent = new Intent(mainActContext, BackgroundPlayerService.class);
         mainActContext.bindService(intent, connection, Context.BIND_AUTO_CREATE);
 
-
-        smallPlayerPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // play or stop music
-                if(!backgroundPlayerService.isNull()) {
-                    if(backgroundPlayerService.isPlaying()) {
-                        // pause media player
-                        backgroundPlayerService.pausePlayer();
-                        smallPlayerPlayButton.setImageResource(R.drawable.ic_play_arrow);
-                    }else{
-                        // start media player
-                        backgroundPlayerService.startPlayer();
-                        smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
-                    }
+        smallPlayerPlayButton.setOnClickListener(v -> {
+            // **FIX**: Added proper null check for the service object
+            if (isBound && backgroundPlayerService != null) {
+                if (backgroundPlayerService.isPlaying()) {
+                    backgroundPlayerService.pausePlayer();
+                    smallPlayerPlayButton.setImageResource(R.drawable.ic_play_arrow);
+                } else {
+                    backgroundPlayerService.startPlayer();
+                    smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
                 }
-
             }
         });
 
-        smallPlayerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!backgroundPlayerService.isNull() && backgroundPlayerService.isPlaying()) {
-                    AudioTrack[] trackArray = tracks.toArray(new AudioTrack[0]);
-                    listener.onSmallPlayerClicked(trackArray, backgroundPlayerService.getIndex());
-                }
-
+        smallPlayerTextView.setOnClickListener(v -> {
+            // **FIX**: Added proper null check for the service object
+            if (isBound && backgroundPlayerService != null && backgroundPlayerService.isPlaying()) {
+                AudioTrack[] trackArray = tracks.toArray(new AudioTrack[0]);
+                listener.onSmallPlayerClicked(trackArray, backgroundPlayerService.getIndex());
             }
         });
-
-
     }
 
     public void playSongs(AudioTrack[] tracks) {
-        // BaseActivity can use this method to tell it to play songs in background
-        this.tracks = new ArrayList<>();
-        this.tracks.addAll(Arrays.asList(tracks));
+        this.tracks = new ArrayList<>(Arrays.asList(tracks));
 
-        backgroundPlayerService.setListener(getContext());
-        backgroundPlayerService.playSongs(this.tracks);
-
-//        backgroundPlayerService.startPlayer();
-        smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
+        if (isBound && backgroundPlayerService != null) {
+            // Service is connected, play immediately.
+            backgroundPlayerService.setListener(getContext());
+            backgroundPlayerService.playSongs(this.tracks);
+            smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
+        } else {
+            // Service is not connected yet, queue the tracks to be played on connection.
+            pendingTracks = this.tracks;
+        }
     }
 
     public void setPlayerTitle(String name) {
@@ -155,12 +135,14 @@ public class SmallPlayerFragment extends Fragment{
 
     @Override
     public void onDestroy() {
-        if(backgroundPlayerService != null && !backgroundPlayerService.isNull()) {
-            backgroundPlayerService.releaseListener();
-        }
-        mainActContext.unbindService(connection);
-        isBound = false;
         super.onDestroy();
+        // **CRITICAL FIX**: Always unbind from the service to prevent memory leaks.
+        if (isBound) {
+            if (backgroundPlayerService != null) {
+                backgroundPlayerService.releaseListener();
+            }
+            mainActContext.unbindService(connection);
+            isBound = false;
+        }
     }
-
 }
