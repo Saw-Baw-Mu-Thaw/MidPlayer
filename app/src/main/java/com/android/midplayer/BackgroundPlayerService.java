@@ -36,8 +36,6 @@ import java.util.List;
 
 public class BackgroundPlayerService extends Service {
 
-    // NOTE: You must add the ExoPlayer dependencies to your build.gradle file:
-    // implementation 'com.google.android.exoplayer:exoplayer:2.19.1' // Check for latest version
 
     public interface bgPlayerListener {
         void onPlay(String trackName);
@@ -60,22 +58,14 @@ public class BackgroundPlayerService extends Service {
 
     private void initializeExoPlayer() {
         if (exoPlayer == null) {
-            // Initialize ExoPlayer
             exoPlayer = new ExoPlayer.Builder(this).build();
-            // Note: ExoPlayer handles PARTIAL_WAKE_LOCK automatically when playing audio
-            // and the app is in the background, so PowerManager setup is less critical.
-            // exoPlayer.setWakeMode(PowerManager.PARTIAL_WAKE_LOCK); // Not directly supported/needed
 
-            // Set up a Listener for playback events
             exoPlayer.addListener(new Player.Listener() {
                 @Override
                 public void onPlaybackStateChanged(int playbackState) {
                     // Handle track completion
                     if (playbackState == Player.STATE_ENDED) {
-                        // Check if there's a next track. ExoPlayer's queue handles this,
-                        // but we keep the logic for listener notification and playlist end.
                         if (exoPlayer.hasNextMediaItem()) {
-                            // ExoPlayer automatically advances, update index for service state
                             index = exoPlayer.getCurrentMediaItemIndex();
                             if (listener != null && index < tracks.size()) {
                                 listener.onPlay(tracks.get(index).getTitle());
@@ -92,7 +82,6 @@ public class BackgroundPlayerService extends Service {
 
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
-                    // Notify listener when playback starts after prepared/loaded
                     if (isPlaying && listener != null && index < tracks.size() && exoPlayer.getPlaybackState() == Player.STATE_READY) {
                         listener.onPlay(tracks.get(index).getTitle());
                     }
@@ -100,9 +89,7 @@ public class BackgroundPlayerService extends Service {
 
                 @Override
                 public void onMediaItemTransition(@NonNull MediaItem mediaItem, int reason) {
-                    // Update index when track changes (e.g., auto-advance or seek)
                     index = exoPlayer.getCurrentMediaItemIndex();
-                    // We notify listener in onIsPlayingChanged or STATE_ENDED check
                 }
             });
         } else {
@@ -139,20 +126,20 @@ public class BackgroundPlayerService extends Service {
 
         exoPlayer.setMediaItems(mediaItems, startIndex, startPositionMs);
         exoPlayer.prepare();
-        exoPlayer.play(); // Start playback immediately
-        this.index = startIndex; // Update the service's index state
+        exoPlayer.play();
+        this.index = startIndex;
     }
 
     public void playSongs(List<AudioTrack> tracks) {
         this.tracks = tracks;
         initializeExoPlayer();
-        playTracks(0, 0); // Start from the beginning of the first track
+        playTracks(0, 0);
     }
 
     public void playSongs(List<AudioTrack> t, int i, int duration) {
         this.tracks = t;
         initializeExoPlayer();
-        playTracks(i, duration); // Start from track 'i' at 'duration' milliseconds
+        playTracks(i, duration);
     }
 
     @Override
@@ -184,12 +171,12 @@ public class BackgroundPlayerService extends Service {
         super.onDestroy();
     }
 
-    // --- Player Control Methods ---
+    //Player Control Methods
     public void pausePlayer() {
         if (exoPlayer != null && exoPlayer.isPlaying()) {
             exoPlayer.pause();
         }
-        stopForeground(false); // Stop being a foreground service, but don't remove notification yet
+        stopForeground(false);
     }
 
     public void startPlayer() {
@@ -204,15 +191,13 @@ public class BackgroundPlayerService extends Service {
     }
 
     public int getIndex() { return index; }
-    public int getDuration() { return exoPlayer != null ? (int) exoPlayer.getCurrentPosition() : 0; } // ExoPlayer uses long for position
+    public int getDuration() { return exoPlayer != null ? (int) exoPlayer.getCurrentPosition() : 0; }
     public List<AudioTrack> getPlaylist() { return tracks; }
 
 
-    // --- Listener and Binder ---
     public void setListener(Context context) {
         if(context instanceof bgPlayerListener) {
             listener = (bgPlayerListener) context;
-            // Optionally, call onPlay immediately if already playing
             if (isPlaying() && index < tracks.size()) {
                 listener.onPlay(tracks.get(index).getTitle());
             }
@@ -230,7 +215,6 @@ public class BackgroundPlayerService extends Service {
     }
 
 
-    // --- Notification Methods ---
     public void createNotificationChannel() {
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "MidPlayer", NotificationManager.IMPORTANCE_DEFAULT);
         channel.setDescription("MidPlayer app is playing music");
@@ -239,8 +223,6 @@ public class BackgroundPlayerService extends Service {
     }
 
     public Notification createNotification() {
-        // You'll typically want a MediaStyle notification with ExoPlayer
-        // but for a minimal replacement, we reuse the basic NotificationCompat setup.
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_logo)
                 .setContentTitle("MidPlayer")
