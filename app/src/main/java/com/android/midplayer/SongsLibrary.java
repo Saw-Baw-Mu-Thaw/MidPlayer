@@ -2,6 +2,8 @@ package com.android.midplayer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,12 +35,10 @@ public class SongsLibrary extends AppCompatActivity implements OnSongClickListen
     // MODIFICATION 3: This method is called when a song in the adapter is clicked
     @Override
     public void onSongClick(AudioTrack audioTrack) {
-        Intent intent = new Intent(SongsLibrary.this, PlayMedia.class);
-
-
-        intent.putExtra("SONG_ID", audioTrack.getId());
-
+       Intent intent = new Intent(SongsLibrary.this, PlayMedia.class);
+       intent.putExtra("SONG_ID", audioTrack.getId());
         startActivity(intent);
+
     }
 
     private List<AudioTrack> getInitialSongList() {
