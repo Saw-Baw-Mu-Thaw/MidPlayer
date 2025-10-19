@@ -26,9 +26,8 @@ BackgroundPlayerService.bgPlayerListener, PlaylistDetailFragment.PlaylistDetailL
 SmallPlayerFragment.SmallPlayerListener{
 
     ImageView playlistButton;
+    ImageView homeButton;
     FragmentManager fragmentManager;
-    FragmentTransaction transaction;
-    PlaylistFragment playlistFragment;
     List<Playlist> playlists;
     SmallPlayerFragment smallPlayerFragment;
 
@@ -59,16 +58,15 @@ SmallPlayerFragment.SmallPlayerListener{
 
         // setting up playlist fragment
         playlistButton = findViewById(R.id.musicLibrary);
+        homeButton = findViewById(R.id.home);
 
         fragmentManager = getSupportFragmentManager();
-        transaction = fragmentManager.beginTransaction();
 
         smallPlayerFragment = SmallPlayerFragment.newInstance();
         fragmentManager.beginTransaction()
-                .replace(R.id.baseActivitySmallPlayerFragmentContainer, smallPlayerFragment)
+                .replace(R.id.baseActivitySmallPlayerFragmentContainer, SmallPlayerFragment.newInstance())
                 .commit();
 
-        playlistFragment = PlaylistFragment.newInstance(playlists);
 
         // account info
         ivAccount = findViewById(R.id.ivAccount);
@@ -91,13 +89,18 @@ SmallPlayerFragment.SmallPlayerListener{
         playlistButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(BaseActivity.this, "Playlist button clicked", Toast.LENGTH_SHORT).show();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.baseActivityFragmentContainer, PlaylistFragment.newInstance(playlists))
+                        .commit();
+            }
+        });
 
-                if (transaction.isEmpty()) {
-                    transaction.replace(R.id.baseActivityFragmentContainer, playlistFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.baseActivityFragmentContainer, new SongsLibraryFragment())
+                        .commit();
             }
         });
 
