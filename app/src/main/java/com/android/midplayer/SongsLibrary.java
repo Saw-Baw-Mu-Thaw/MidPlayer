@@ -36,34 +36,25 @@ public class SongsLibrary extends AppCompatActivity implements OnSongClickListen
     @Override
     public void onSongClick(AudioTrack audioTrack) {
        Intent intent = new Intent(SongsLibrary.this, PlayMedia.class);
-       intent.putExtra("SONG_ID", audioTrack.getId());
+        intent.putExtra("SONG_ID", audioTrack.getId());
+        intent.putExtra("SONG_TITLE", audioTrack.getTitle());
+        intent.putExtra("ARTIST_NAME", audioTrack.getArtist());
         startActivity(intent);
 
     }
 
-    private List<AudioTrack> getInitialSongList() {
+    public static List<AudioTrack> getInitialSongList() {
         List<AudioTrack> trackList = new ArrayList<>();
-        trackList.add(new AudioTrack(1, "mellow", "qlowdy", "10/10/2025 9:46 AM", "Lo-fi", "youtube audio library"));
-        trackList.add(new AudioTrack(2, "happier", "sakura-girl", "10/10/2025 9:46 AM", "Electronic", "youtube audio library"));
-        trackList.add(new AudioTrack(3, "watershed-moment", "ferco", "10/10/2025 9:45 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(4, "take-me-higher", "liqwyd", "10/10/2025 9:44 AM", "Ambient", "youtube audio library"));
-        trackList.add(new AudioTrack(5, "let-me-know", "balynt", "10/10/2025 9:51 AM", "Cinematic", "youtube audio library"));
-        trackList.add(new AudioTrack(6, "peace-of-mind", "roa-music", "10/10/2025 9:54 AM", "Lo-fi", "youtube audio library"));
-        trackList.add(new AudioTrack(7, "heroic", "alex-productions", "10/10/2025 10:01 AM", "Ambient", "youtube audio library"));
-        trackList.add(new AudioTrack(8, "afterglow", "tokyo-music-walker", "10/10/2025 10:02 AM", "Ambient", "youtube audio library"));
-        trackList.add(new AudioTrack(9, "smile", "scandinavianz", "10/10/2025 10:02 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(10, "home", "sakura-girl", "10/10/2025 10:02 AM", "Folk", "youtube audio library"));
-        trackList.add(new AudioTrack(11, "orange", "next-route", "10/10/2025 10:03 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(12, "thingy-moe", "zaw-paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(13, "myay-pyant-thu-lay","lay-phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(14, "ma-sone-thaw-lan","zaw-paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(15, "kabar-a-setset","bunny-phyoe","03/20/2019 9:46 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(16, "roar","katy-perry", "08/10/2013 5:20 PM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(17, "just-the-way-your-are", "bruno-mars", "07/20/2010 6:50 PM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(18,"birds-of-a-feather","billie-eilish", "05/17/2024 7:30 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(19,"believer", "imagine-dragons",  "02/01/2017 10:15 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(20,"you-belong-with-me","taylor-swift","04/18/2009 8:45 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(21,"die-with-a-smail","lady-gaga-ft-bruno-mars","07/04/2024 9:00 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(1, "Thingyan Moe", "Zaw Paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
+        trackList.add(new AudioTrack(2, "Myay Pyant Thu Lay","Lay Phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
+        trackList.add(new AudioTrack(3, "Ma Sone Thaw Lan","Zaw Paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(4, "Kabar A Setset","Bunny Phyoe","03/20/2019 9:46 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(5, "Roar","Katy Perry", "08/10/2013 5:20 PM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(6, "Just The Way Your Are", "Bruno Mars", "07/20/2010 6:50 PM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(7,"Birds Of A Feather","Billie Eilish", "05/17/2024 7:30 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(8,"Believer", "Imagine Dragons",  "02/01/2017 10:15 AM", "Rock", "youtube audio library"));
+        trackList.add(new AudioTrack(9,"You Belong With Me","Taylor Swift","04/18/2009 8:45 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(10,"Die With A Smail","Lady Gaga ft Bruno Mars","07/04/2024 9:00 AM", "Pop", "youtube audio library"));
         return trackList;
     }
 
