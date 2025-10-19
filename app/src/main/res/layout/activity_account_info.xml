@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleTextColor="#ffffff"
-        app:title="Your Username"
+        app:title="My Account"
         android:background="#7F59C3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,21 +34,21 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tvAccountInfo"
+                android:id="@+id/txtAccountInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/your_info"
                 android:textSize="20sp"/>
 
             <TextView
-                android:id="@+id/tvAccountUsername"
+                android:id="@+id/txtAccountUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
                 android:textSize="20sp"/>
 
             <TextView
-                android:id="@+id/tvAccountEmail"
+                android:id="@+id/txtAccountEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/email"
