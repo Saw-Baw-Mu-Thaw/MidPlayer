@@ -51,17 +51,13 @@ public class PlaylistListAdapter extends ArrayAdapter<Playlist> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         this.is_portrait = mainActContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
-        if(convertView == null){
-            LayoutInflater inflater = LayoutInflater.from(mainActContext);
+        LayoutInflater inflater = LayoutInflater.from(mainActContext);
 
-            if(is_portrait){
-                convertView =inflater.inflate(R.layout.playlist_list_item, parent, false);
-            }else{
-                convertView =inflater.inflate(R.layout.playlist_grid_item, parent, false);
-            }
+        if(is_portrait){
+            convertView =inflater.inflate(R.layout.playlist_list_item, parent, false);
+        }else{
+            convertView =inflater.inflate(R.layout.playlist_grid_item, parent, false);
         }
-
-
 
 
         View view = convertView;
@@ -116,6 +112,7 @@ public class PlaylistListAdapter extends ArrayAdapter<Playlist> {
                         } else if (itemId == R.id.menu_item_delete) {
                             // delete playlist
                             listener.onPlaylistRemove(position);
+                            playlists.remove(position);
                             notifyDataSetChanged();
                             Toast.makeText(mainActContext, "Playlist Deleted", Toast.LENGTH_SHORT).show();
                         } else {

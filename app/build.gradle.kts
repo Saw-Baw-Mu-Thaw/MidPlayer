@@ -48,4 +48,7 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer:2.19.1")
 // Recommended: UI library for PlayerView
     implementation("com.google.android.exoplayer:exoplayer-ui:2.19.1")
+    //gif playing
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 }
