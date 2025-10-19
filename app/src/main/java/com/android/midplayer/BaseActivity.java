@@ -25,7 +25,8 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements PlaylistFragment.PlaylistFragListener,
 BackgroundPlayerService.bgPlayerListener, PlaylistDetailFragment.PlaylistDetailListener,
-SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListener {
+SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListener ,
+ArtistFragment.ArtistFragListener, GenreFragment.GenreFragListener {
 
     LinearLayout playlistButton;
 
@@ -67,8 +68,6 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
         searchSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BaseActivity.this, "Search Clicked", Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(BaseActivity.this, SearchActivity.class);
                 startActivity(intent);
             }
@@ -100,7 +99,6 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
         ivAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(BaseActivity.this, "My Account", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(BaseActivity.this, AccountInfoActivity.class);
                 intent.putExtra("username", username);
                 intent.putExtra("email", email);
@@ -135,7 +133,23 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
             }
         });
 
+        artistListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.baseActivityFragmentContainer, new ArtistFragment())
+                        .commit();
+            }
+        });
 
+        genreListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.baseActivityFragmentContainer, new GenreFragment())
+                        .commit();
+            }
+        });
     }
 
     private void applyTheme() {
@@ -157,8 +171,6 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
 
     public void onPlaylistClick(Playlist playlist) {
         // launch the playlist detail fragment
-
-        Toast.makeText(BaseActivity.this, "Playlist clicked", Toast.LENGTH_SHORT).show();
         fragmentManager.beginTransaction()
                 .replace(R.id.baseActivityFragmentContainer, PlaylistDetailFragment.newInstance(playlist))
                 .addToBackStack(null)
@@ -173,7 +185,6 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
 
     public void onPlayAllSongs(Playlist playlist) {
         // give media player to play all songs in the playlist
-        Toast.makeText(BaseActivity.this, "Playing playlist", Toast.LENGTH_SHORT).show();
         smallPlayerFragment.playSongs(playlist.getSong_ids());
     }
 
@@ -244,6 +255,20 @@ SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListen
     public void onPlaylistButtonClicked() {
         fragmentManager.beginTransaction()
                 .replace(R.id.baseActivityFragmentContainer, PlaylistFragment.newInstance(playlists))
+                .commit();
+    }
+
+    @Override
+    public void onArtistClick(String name) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.baseActivityFragmentContainer, ArtistSongsFragment.newInstance(name))
+                .commit();
+    }
+
+    @Override
+    public void onGenreClick(String genre) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.baseActivityFragmentContainer, GenreSongFragment.newInstance(genre))
                 .commit();
     }
 }

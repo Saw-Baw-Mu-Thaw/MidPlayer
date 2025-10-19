@@ -24,4 +24,6 @@
     <string name="logout">Logout</string>
     <string name="delete_account">Delete Account</string>
     <string name="nothing_is_playing">Nothing is playing</string>
+    <string name="artists">Artists</string>
+    <string name="genres">Genres</string>
 </resources>
