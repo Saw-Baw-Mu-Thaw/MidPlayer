@@ -1,9 +1,7 @@
 package com.android.midplayer;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.media.PlaybackParams;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -14,18 +12,23 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackParameters; // EXO: Use ExoPlayer's parameters
+import com.google.android.exoplayer2.Player; // EXO: Use ExoPlayer's base Player interface
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class PlayMedia extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
+    // EXO: Changed from MediaPlayer to ExoPlayer
+    private ExoPlayer exoPlayer;
     private ImageView playPauseButton;
     private ImageView nextSongButton;
     private ImageView prevSongButton;
@@ -36,15 +39,17 @@ public class PlayMedia extends AppCompatActivity {
     private Handler seekBarHandler = new Handler();
     private TextView currentTimeText, durationTimeText;
     private final int TOTAL_SONGS = 11;
+    private ImageView musicPlayerGif; // EXO: Made this a class member for access in listener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_media);
 
-        ImageView musicPlayerGif = findViewById(R.id.musicPlayerGif);
+        // EXO: Assign to class member
+        musicPlayerGif = findViewById(R.id.musicPlayerGif);
         Glide.with(this)
-                .asGif()  // Explicitly tell Glide to load as a GIF
+                .asGif()
                 .load(R.drawable.music_play)
                 .into(musicPlayerGif);
 
@@ -55,30 +60,21 @@ public class PlayMedia extends AppCompatActivity {
         currentTimeText = findViewById(R.id.currentTimeText);
         durationTimeText = findViewById(R.id.durationTimeText);
         speedSpinner = (Spinner) findViewById(R.id.speedSelectionSpinner);
-        // 1. Create the ArrayAdapter
+
+        // Spinner setup (no changes)
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.playback_speeds, // Your string array
-                R.layout.custom_spinner_item // The custom layout you created
+                R.array.playback_speeds,
+                R.layout.custom_spinner_item
         );
-
-        // 2. Specify the layout to use when the list of choices appears
-        // You can reuse the same layout or create a separate one for the dropdown
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // 3. Apply the adapter to the spinner
         speedSpinner.setAdapter(adapter);
 
         speedSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
-
                 String selectedSpeed = parent.getItemAtPosition(position).toString();
-                float speed = 1.0f; // Default speed
-
-                // Use a switch to convert the string to a float
+                float speed = 1.0f;
                 switch (selectedSpeed) {
                     case "0.5x":
                         speed = 0.5f;
@@ -86,25 +82,22 @@ public class PlayMedia extends AppCompatActivity {
                     case "1.5x":
                         speed = 1.5f;
                         break;
-                    // "1.0x (Normal)" will fall through to the default
                     default:
                         speed = 1.0f;
                         break;
                 }
-
-                // Call the function to change the speed
                 changePlayerSpeed(speed);
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // This is usually left empty
             }
         });
 
-        Intent intent = getIntent();
+        // EXO: Initialize ExoPlayer
+        initializePlayer();
 
+        Intent intent = getIntent();
         if (intent != null && intent.hasExtra("SONG_ID")) {
             currentSongId = intent.getIntExtra("SONG_ID", -1);
             if (currentSongId != -1) {
@@ -113,22 +106,12 @@ public class PlayMedia extends AppCompatActivity {
         }
 
         playPauseButton.setOnClickListener(v -> {
-            if (mediaPlayer != null) {
-                if (mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
-                    playPauseButton.setImageResource(R.drawable.ic_play_arrow);
-                    seekBarHandler.removeCallbacks(updateSeekBar);
-                    Glide.with(this).clear(musicPlayerGif); // pause gif play
+            // EXO: Simplified play/pause logic. The listener will handle UI updates.
+            if (exoPlayer != null) {
+                if (exoPlayer.isPlaying()) {
+                    exoPlayer.pause();
                 } else {
-                    mediaPlayer.start();
-
-
-                    playPauseButton.setImageResource(R.drawable.ic_pause);
-                    updateSeekBar.run();
-                    // start gif play
-                    Glide.with(this)
-                            .load(R.drawable.music_play)
-                            .into(musicPlayerGif);
+                    exoPlayer.play();
                 }
             }
         });
@@ -136,8 +119,9 @@ public class PlayMedia extends AppCompatActivity {
         mediaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser && mediaPlayer != null) {
-                    mediaPlayer.seekTo(progress);
+                if (fromUser && exoPlayer != null) {
+                    // EXO: Use exoPlayer.seekTo
+                    exoPlayer.seekTo(progress);
                 }
             }
 
@@ -150,13 +134,11 @@ public class PlayMedia extends AppCompatActivity {
             }
         });
 
-        //implement next song function
         nextSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mediaPlayer != null) {
+                if (exoPlayer != null) { // EXO: Check exoPlayer
                     currentSongId++;
-                    // If the next song ID exceeds the total, loop back to the first song
                     if (currentSongId > TOTAL_SONGS) {
                         currentSongId = 1;
                     }
@@ -164,13 +146,13 @@ public class PlayMedia extends AppCompatActivity {
                 }
             }
         });
-        //implement prev song function
+
         prevSongButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mediaPlayer != null) {
+                if (exoPlayer != null) { // EXO: Check exoPlayer
                     currentSongId--;
-                    if (currentSongId == 0) { // intent firstly check whether it is less than -1
+                    if (currentSongId == 0) {
                         currentSongId = TOTAL_SONGS;
                     }
                     playSongById(currentSongId);
@@ -179,41 +161,77 @@ public class PlayMedia extends AppCompatActivity {
         });
     }
 
+    // EXO: New method to initialize the player and set up its listener
+    private void initializePlayer() {
+        exoPlayer = new ExoPlayer.Builder(this).build();
+        exoPlayer.addListener(new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if (playbackState == Player.STATE_READY) {
+                    // When ready, update duration and start seekbar
+                    mediaSeekBar.setMax((int) exoPlayer.getDuration());
+                    durationTimeText.setText(formatDuration(exoPlayer.getDuration()));
+                    updateSeekBar.run();
+                } else if (playbackState == Player.STATE_ENDED) {
+                    // When completed, reset UI
+                    playPauseButton.setImageResource(R.drawable.ic_play_arrow);
+                    mediaSeekBar.setProgress(0);
+                    currentTimeText.setText("0:00");
+                    seekBarHandler.removeCallbacks(updateSeekBar);
+                    // Go to next song automatically
+                    nextSongButton.performClick();
+                }
+            }
+
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                // This single callback handles all UI updates for play/pause
+                if (isPlaying) {
+                    playPauseButton.setImageResource(R.drawable.ic_pause);
+                    seekBarHandler.postDelayed(updateSeekBar, 1000);
+                    Glide.with(PlayMedia.this)
+                            .asGif()
+                            .load(R.drawable.music_play)
+                            .into(musicPlayerGif);
+                } else {
+                    playPauseButton.setImageResource(R.drawable.ic_play_arrow);
+                    seekBarHandler.removeCallbacks(updateSeekBar);
+                    Glide.with(PlayMedia.this).clear(musicPlayerGif);
+                }
+            }
+        });
+    }
+
     public void playSongById(int songId) {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
+        if (exoPlayer == null) {
+            initializePlayer();
         }
 
+        // EXO: Build a URI for the raw resource
         String resourceName = "song" + songId;
         int resourceId = getResources().getIdentifier(resourceName, "raw", getPackageName());
 
         if (resourceId != 0) {
-            mediaPlayer = MediaPlayer.create(this, resourceId);
-            mediaPlayer.start();
-            playPauseButton.setImageResource(R.drawable.ic_pause);
+            Uri mediaUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
+            // EXO: Create a MediaItem
+            MediaItem mediaItem = MediaItem.fromUri(mediaUri);
 
-            mediaSeekBar.setMax(mediaPlayer.getDuration());
-            durationTimeText.setText(formatDuration(mediaPlayer.getDuration()));
-            updateSeekBar.run();
-
-            mediaPlayer.setOnCompletionListener(mp -> {
-                mp.release();
-                mediaPlayer = null;
-                playPauseButton.setImageResource(R.drawable.ic_play_arrow);
-                mediaSeekBar.setProgress(0);
-                currentTimeText.setText("0:00");
-                seekBarHandler.removeCallbacks(updateSeekBar);
-            });
+            // EXO: Set the item, prepare, and play
+            exoPlayer.setMediaItem(mediaItem);
+            exoPlayer.prepare();
+            exoPlayer.play();
+            // All UI updates (duration, button icon) are now handled by the listener
         } else {
-            Log.e("MediaPlayer", "Raw resource not found for song ID: " + songId);
+            Log.e("ExoPlayer", "Raw resource not found for song ID: " + songId);
         }
     }
 
     private Runnable updateSeekBar = new Runnable() {
         public void run() {
-            if (mediaPlayer != null) {
-                int currentPosition = mediaPlayer.getCurrentPosition();
-                mediaSeekBar.setProgress(currentPosition);
+            // EXO: Check exoPlayer and isPlaying
+            if (exoPlayer != null && exoPlayer.isPlaying()) {
+                long currentPosition = exoPlayer.getCurrentPosition();
+                mediaSeekBar.setProgress((int) currentPosition);
                 currentTimeText.setText(formatDuration(currentPosition));
                 seekBarHandler.postDelayed(this, 1000);
             }
@@ -229,34 +247,25 @@ public class PlayMedia extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
+        // EXO: Release exoPlayer
+        if (exoPlayer != null) {
+            exoPlayer.release();
+            exoPlayer = null;
         }
         seekBarHandler.removeCallbacks(updateSeekBar);
         super.onDestroy();
     }
 
     private void changePlayerSpeed(float speed) {
-        // This method is only available on API 23 (Marshmallow) and above.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            try {
-                if (mediaPlayer != null) {
-                    PlaybackParams params = new PlaybackParams();
-                    params.setSpeed(speed);
-
-                    // This keeps the pitch normal, so it doesn't sound like a "chipmunk"
-                    params.setPitch(1.0f);
-
-                    mediaPlayer.setPlaybackParams(params);
-                }
-            } catch (Exception e) {
-                // This can happen if the media player is in an invalid state
-                Log.e("MediaPlayer", "Failed to set playback speed: " + e.getMessage());
+        // EXO: Removed the API level check, ExoPlayer handles this
+        try {
+            if (exoPlayer != null) {
+                // EXO: Use ExoPlayer's PlaybackParameters
+                PlaybackParameters params = new PlaybackParameters(speed, 1.0f); // (speed, pitch)
+                exoPlayer.setPlaybackParameters(params);
             }
-        } else {
-            // Show a message to the user that their phone is too old for this feature
-            Log.w("MediaPlayer", "Playback speed not supported on this API level.");
+        } catch (Exception e) {
+            Log.e("ExoPlayer", "Failed to set playback speed: " + e.getMessage());
         }
     }
 }
