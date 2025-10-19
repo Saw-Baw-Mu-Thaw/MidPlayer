@@ -7,4 +7,50 @@
     <color name="gray_text">#B3B3B3</color>
     <color name="blue_accent">#007BFF</color>
 
+    <color name="primary">#6366F1</color>
+    <color name="primary_dark">#4F46E5</color>
+    <color name="primary_light">#818CF8</color>
+
+    <!-- Accent Colors -->
+    <color name="accent">#EC4899</color>
+    <color name="accent_light">#F472B6</color>
+
+    <!-- Background Colors - Balanced, not too dark, not too light -->
+    <color name="background">#1E1B2E</color>
+    <color name="background_secondary">#2A2640</color>
+    <color name="surface">#332E4D</color>
+
+    <!-- Input and Card Colors -->
+    <color name="input_background">#2A2640</color>
+    <color name="card_background">#332E4D</color>
+    <color name="input_border">#3D3856</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B4B0C8</color>
+    <color name="text_hint">#7E7A92</color>
+
+    <!-- Utility Colors -->
+    <color name="divider">#3D3856</color>
+    <color name="error">#EF4444</color>
+    <color name="success">#10B981</color>
+
+    <!-- Player Colors -->
+    <color name="player_background">#2A2640</color>
+    <color name="progress_bar">#6366F1</color>
+    <color name="progress_background">#3D3856</color>
+    <color name="control_button_bg">#332E4D</color>
+
+    <!-- Gradient Colors (used in drawables) -->
+    <color name="gradient_start">#6366F1</color>
+    <color name="gradient_center">#8B5CF6</color>
+    <color name="gradient_end">#EC4899</color>
+    <color name="gradient_bg_start">#1E1B2E</color>
+    <color name="gradient_bg_center">#2A2640</color>
+    <color name="gradient_bg_end">#332E4D</color>
+
+    <!-- Icon Colors -->
+    <color name="icon_tint">#B4B0C8</color>
+    <color name="ripple_color">#40FFFFFF</color>
+
 </resources>

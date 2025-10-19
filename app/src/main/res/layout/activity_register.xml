@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".RegisterActivity">
 
     <LinearLayout
@@ -20,10 +22,13 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
             android:contentDescription="@string/logo"
-            android:src="@drawable/logo"/>
+            android:src="@drawable/ic_music_note"
+            app:tint="#ffffff"/>
+
 
         <EditText
             android:id="@+id/edtRegisterUsername"
@@ -33,7 +38,11 @@
             android:hint="@string/username"
             android:autofillHints="username"
             android:inputType="text"
-            android:textColorHint="@color/cardview_dark_background"/>
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:background="@drawable/input_background"
+            android:padding="14dp"
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/edtRegisterEmail"
@@ -43,7 +52,11 @@
             android:hint="@string/email"
             android:autofillHints="emailAddress"
             android:inputType="textEmailAddress"
-            android:textColorHint="@color/cardview_dark_background"/>
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:background="@drawable/input_background"
+            android:padding="14dp"
+            android:layout_marginTop="12dp"/>
 
         <EditText
             android:id="@+id/edtRegisterPassword"
@@ -53,7 +66,11 @@
             android:hint="@string/password"
             android:autofillHints="password"
             android:inputType="textPassword"
-            android:textColorHint="@color/cardview_dark_background"/>
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:background="@drawable/input_background"
+            android:padding="14dp"
+            android:layout_marginTop="12dp"/>
 
         <EditText
             android:id="@+id/edtConfirmPassword"
@@ -63,13 +80,20 @@
             android:hint="@string/confirm_password"
             android:autofillHints="password"
             android:inputType="textPassword"
-            android:textColorHint="@color/cardview_dark_background"/>
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:background="@drawable/input_background"
+            android:padding="14dp"
+            android:layout_marginTop="12dp"/>
 
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/register"/>
+            android:text="@string/register"
+            android:textColor="@color/white"
+            android:backgroundTint="@null"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:id="@+id/txtLogin"
@@ -78,13 +102,10 @@
             android:layout_height="wrap_content"
             android:text="@string/login_prompt"
             android:textSize="12sp"
+            android:textColor="@color/text_secondary"
             android:clickable="true"
             android:focusable="true"
             android:padding="10dp"/>
-
-
-
-
 
     </LinearLayout>
 
