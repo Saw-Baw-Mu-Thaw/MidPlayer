@@ -54,17 +54,6 @@ public class SongsLibraryFragment extends Fragment {
 
     private List<AudioTrack> getInitialSongList() {
         List<AudioTrack> trackList = new ArrayList<>();
-        trackList.add(new AudioTrack(1, "mellow", "qlowdy", "10/10/2025 9:46 AM", "Lo-fi", "youtube audio library"));
-        trackList.add(new AudioTrack(2, "happier", "sakura-girl", "10/10/2025 9:46 AM", "Electronic", "youtube audio library"));
-        trackList.add(new AudioTrack(3, "watershed-moment", "ferco", "10/10/2025 9:45 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(4, "take-me-higher", "liqwyd", "10/10/2025 9:44 AM", "Ambient", "youtube audio library"));
-        trackList.add(new AudioTrack(5, "let-me-know", "balynt", "10/10/2025 9:51 AM", "Cinematic", "youtube audio library"));
-        trackList.add(new AudioTrack(6, "peace-of-mind", "roa-music", "10/10/2025 9:54 AM", "Lo-fi", "youtube audio library"));
-        trackList.add(new AudioTrack(7, "heroic", "alex-productions", "10/10/2025 10:01 AM", "Ambient", "youtube audio library"));
-        trackList.add(new AudioTrack(8, "afterglow", "tokyo-music-walker", "10/10/2025 10:02 AM", "Ambient", "youtube audio library"));
-        trackList.add(new AudioTrack(9, "smile", "scandinavianz", "10/10/2025 10:02 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(10, "home", "sakura-girl", "10/10/2025 10:02 AM", "Folk", "youtube audio library"));
-        trackList.add(new AudioTrack(11, "orange", "next-route", "10/10/2025 10:03 AM", "Pop", "youtube audio library"));
         trackList.add(new AudioTrack(12, "thingy-moe", "zaw-paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
         trackList.add(new AudioTrack(13, "myay-pyant-thu-lay","lay-phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
         trackList.add(new AudioTrack(14, "ma-sone-thaw-lan","zaw-paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library"));
