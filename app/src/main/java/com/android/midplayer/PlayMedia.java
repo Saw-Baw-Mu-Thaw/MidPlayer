@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class PlayMedia extends AppCompatActivity {
     private ImageView musicLibraryButton;
     private SeekBar mediaSeekBar;
 
+    private ImageView setFavorite;
     private int currentSongId;
 
 
@@ -75,6 +77,22 @@ public class PlayMedia extends AppCompatActivity {
         currentTimeText = findViewById(R.id.currentTimeText);
         durationTimeText = findViewById(R.id.durationTimeText);
         speedSpinner = (Spinner) findViewById(R.id.speedSelectionSpinner);
+        setFavorite = findViewById(R.id.favoriteSong);
+
+        setFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(allSongs.get(currentSongId-1).isFavorite()){
+                    allSongs.get(currentSongId-1).setFavorite(false);
+                    setFavorite.setImageResource(R.drawable.ic_favorite);
+                }
+                else{
+                    allSongs.get(currentSongId-1).setFavorite(true);
+                    setFavorite.setImageResource(R.drawable.ic_heart_smile);
+                    Toast.makeText(PlayMedia.this, "Song added to favorites", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         // Spinner setup (no changes)
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(

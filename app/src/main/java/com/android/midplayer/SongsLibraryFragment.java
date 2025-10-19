@@ -33,7 +33,7 @@ public class SongsLibraryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Find the RecyclerView from the inflated view
-        allSongs = getInitialSongList();
+        allSongs = SongsLibrary.getInitialSongList();
         recyclerView = view.findViewById(R.id.recyclerViewSongs);
 
 
@@ -52,19 +52,5 @@ public class SongsLibraryFragment extends Fragment {
         startActivity(intent);
     }
 
-    private List<AudioTrack> getInitialSongList() {
-        List<AudioTrack> trackList = new ArrayList<>();
-        trackList.add(new AudioTrack(1, "Thingyan Moe", "Zaw Paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(2, "Myay Pyant Thu Lay","Lay Phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(3, "Ma Sone Thaw Lan","Zaw Paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(4, "Kabar A Setset","Bunny Phyoe","03/20/2019 9:46 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(5, "Roar","Katy Perry", "08/10/2013 5:20 PM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(6, "Just The Way Your Are", "Bruno Mars", "07/20/2010 6:50 PM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(7,"Birds Of A Feather","Billie Eilish", "05/17/2024 7:30 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(8,"Believer", "Imagine Dragons",  "02/01/2017 10:15 AM", "Rock", "youtube audio library"));
-        trackList.add(new AudioTrack(9,"You Belong With Me","Taylor Swift","04/18/2009 8:45 AM", "Pop", "youtube audio library"));
-        trackList.add(new AudioTrack(10,"Die With A Smail","Lady Gaga ft Bruno Mars","07/04/2024 9:00 AM", "Pop", "youtube audio library"));
 
-        return trackList;
-    }
 }
