@@ -23,6 +23,7 @@ public class SongsLibrary extends AppCompatActivity implements OnSongClickListen
         setContentView(R.layout.activity_songs_library);
 
         allSongs = getInitialSongList();
+        /*
         recyclerView = findViewById(R.id.recyclerViewSongs);
 
 
@@ -30,16 +31,29 @@ public class SongsLibrary extends AppCompatActivity implements OnSongClickListen
 
         recyclerView.setAdapter(songAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        */
+
+         /*
+         //Example calls For Baw Thaw, loop through it by getting artists list first then
+
+         List<AudioTrack> zawPaingSongs = SongsLibrary.getSongsByArtist("Zaw Paing");
+
+            // To get all "Rock" songs
+            List<AudioTrack> rockSongs = SongsLibrary.getSongsByGenre("Rock");
+
+         */
     }
 
     // MODIFICATION 3: This method is called when a song in the adapter is clicked
     @Override
     public void onSongClick(AudioTrack audioTrack) {
+      /*
        Intent intent = new Intent(SongsLibrary.this, PlayMedia.class);
         intent.putExtra("SONG_ID", audioTrack.getId());
         intent.putExtra("SONG_TITLE", audioTrack.getTitle());
         intent.putExtra("ARTIST_NAME", audioTrack.getArtist());
         startActivity(intent);
+       */
 
     }
 
@@ -56,6 +70,46 @@ public class SongsLibrary extends AppCompatActivity implements OnSongClickListen
         trackList.add(new AudioTrack(9,"You Belong With Me","Taylor Swift","04/18/2009 8:45 AM", "Pop", "youtube audio library"));
         trackList.add(new AudioTrack(10,"Die With A Smail","Lady Gaga ft Bruno Mars","07/04/2024 9:00 AM", "Pop", "youtube audio library"));
         return trackList;
+    }
+
+    public static List<AudioTrack> getSongsByArtist(String artistName) {
+        List<AudioTrack> allSongs = getInitialSongList();
+        List<AudioTrack> artistSongs = new ArrayList<>();
+
+        if (artistName == null || artistName.isEmpty()) {
+            return artistSongs; // Return empty list if no artist is specified
+        }
+
+        for (AudioTrack track : allSongs) {
+            // Use equalsIgnoreCase for a case-insensitive match
+            if (track.getArtist().equalsIgnoreCase(artistName)) {
+                artistSongs.add(track);
+            }
+        }
+        return artistSongs;
+    }
+
+    /**
+     * Returns a list of all songs in a specific genre.
+     *
+     * @param genreName The name of the genre to search for.
+     * @return A List of AudioTrack objects matching the genre.
+     */
+    public static List<AudioTrack> getSongsByGenre(String genreName) {
+        List<AudioTrack> allSongs = getInitialSongList();
+        List<AudioTrack> genreSongs = new ArrayList<>();
+
+        if (genreName == null || genreName.isEmpty()) {
+            return genreSongs; // Return empty list if no genre is specified
+        }
+
+        for (AudioTrack track : allSongs) {
+            // Use equalsIgnoreCase for a case-insensitive match
+            if (track.getGenre().equalsIgnoreCase(genreName)) {
+                genreSongs.add(track);
+            }
+        }
+        return genreSongs;
     }
 
     // Saw Baw Mu Thaw Code
