@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,34 +10,49 @@
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="@color/card_background">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/card_background"
+        android:padding="12dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/music_note"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            app:tint="@color/primary"
+            android:contentDescription="Song icon"/>
 
         <TextView
             android:id="@+id/playlistDetailSongNameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
+            android:textSize="18sp"
             android:text="mySong"
             android:layout_weight="1"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"/>
 
         <ImageButton
             android:id="@+id/playlistDetailPlayImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/play_arrow"
             android:layout_weight="0"
             android:layout_gravity="center"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginEnd="5dp"
+            android:background="@color/card_background"
+            app:tint="@color/primary"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Play song"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

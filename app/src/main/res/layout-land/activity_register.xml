@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:contentDescription="@string/logo"
             android:src="@drawable/ic_music_note"
-            app:tint="#ffffff" />
+            app:tint="#ffffff"/>
 
         <EditText
             android:id="@+id/edtRegisterUsername"
@@ -41,7 +41,7 @@
             android:textColorHint="@color/text_hint"
             android:background="@drawable/input_background"
             android:padding="14dp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"/>
 
         <EditText
             android:id="@+id/edtRegisterEmail"
@@ -55,7 +55,7 @@
             android:textColorHint="@color/text_hint"
             android:background="@drawable/input_background"
             android:padding="14dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"/>
 
         <EditText
             android:id="@+id/edtRegisterPassword"
@@ -69,7 +69,7 @@
             android:textColorHint="@color/text_hint"
             android:background="@drawable/input_background"
             android:padding="14dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"/>
 
         <EditText
             android:id="@+id/edtConfirmPassword"
@@ -83,19 +83,19 @@
             android:textColorHint="@color/text_hint"
             android:background="@drawable/input_background"
             android:padding="14dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"/>
 
         <Button
             android:id="@+id/btnCreateAccount"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="@string/register"
-            android:textColor="@color/white"
+            android:layout_marginTop="20dp"
             android:backgroundTint="@null"
-            android:layout_marginTop="20dp" />
+            android:text="@string/register"
+            android:textColor="@color/white" />
 
         <TextView
-            android:id="@+id/txtLoginSignup"
+            android:id="@+id/txtLogin"
             android:minHeight="48dp"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
@@ -104,8 +104,7 @@
             android:textColor="@color/text_secondary"
             android:clickable="true"
             android:focusable="true"
-            android:padding="10dp"
-            android:layout_marginTop="8dp" />
+            android:padding="10dp"/>
 
     </LinearLayout>
 

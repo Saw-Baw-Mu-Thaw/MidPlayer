@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:background="@color/card_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -26,17 +28,20 @@
             android:inputType="text"
             android:maxLines="1"
             android:padding="12dp"
-            android:background="@android:drawable/edit_text"
-            android:textColor="@color/black" />
+            android:background="@color/input_background"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"/>
 
         <ImageButton
             android:id="@+id/searchButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/ic_search"
             android:contentDescription="Search"
-            app:tint="#304FFE" />
+            android:background="@color/input_background"
+            app:tint="@color/primary"
+            android:foreground="?attr/selectableItemBackground"/>
 
     </LinearLayout>
 
