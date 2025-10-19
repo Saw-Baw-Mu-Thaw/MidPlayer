@@ -1,4 +1,62 @@
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- DARK MODE COLORS - All colors for night mode -->
+    <color name="background">#0F0E14</color>
+    <color name="background_secondary">#16141F</color>
+    <color name="surface">#1E1B2E</color>
 
+    <color name="input_background">#1E1B2E</color>
+    <color name="card_background">#252232</color>
+    <color name="input_border">#2A2640</color>
+
+    <color name="text_primary">#F5F5F5</color>
+    <color name="text_secondary">#A8A4BC</color>
+    <color name="text_hint">#6E6A82</color>
+
+    <color name="divider">#2A2640</color>
+    <color name="player_background">#1E1B2E</color>
+    <color name="progress_background">#2A2640</color>
+    <color name="control_button_bg">#252232</color>
+
+    <color name="gradient_bg_start">#0F0E14</color>
+    <color name="gradient_bg_center">#16141F</color>
+    <color name="gradient_bg_end">#1E1B2E</color>
+
+    <color name="icon_tint">#A8A4BC</color>
+
+    <!-- Base application theme for Dark Mode -->
+    <style name="Base.Theme.YourAppName" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/accent</item>
+        <item name="colorSecondaryVariant">@color/accent_light</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Background colors - DARKER -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/card_background</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/background</item>
+
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+
+        <!-- Error color -->
+        <item name="colorError">@color/error</item>
+    </style>
+
+    <style name="Theme.YourAppName" parent="Base.Theme.YourAppName" />
 </resources>
