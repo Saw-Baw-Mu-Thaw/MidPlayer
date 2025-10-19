@@ -37,7 +37,7 @@
             app:tint="?attr/colorOnBackground"/>
 
         <ImageView
-            android:id="@+id/account"
+            android:id="@+id/ivAccount"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_account"

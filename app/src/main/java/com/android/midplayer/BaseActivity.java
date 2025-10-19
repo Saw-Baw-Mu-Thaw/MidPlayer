@@ -22,7 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements PlaylistFragment.PlaylistFragListener,
-BackgroundPlayerService.bgPlayerListener{
+BackgroundPlayerService.bgPlayerListener, PlaylistDetailFragment.PlaylistDetailListener,
+SmallPlayerFragment.SmallPlayerListener{
 
     ImageView playlistButton;
     FragmentManager fragmentManager;
@@ -124,7 +125,10 @@ BackgroundPlayerService.bgPlayerListener{
         // launch the playlist detail fragment
 
         Toast.makeText(BaseActivity.this, "Playlist clicked", Toast.LENGTH_SHORT).show();
-
+        fragmentManager.beginTransaction()
+                .replace(R.id.baseActivityFragmentContainer, PlaylistDetailFragment.newInstance(playlist))
+                .addToBackStack(null)
+                .commit();
     }
 
     public void onPlaylistRemove(int position) {
@@ -157,5 +161,40 @@ BackgroundPlayerService.bgPlayerListener{
     @Override
     public void onFinish() {
         smallPlayerFragment.onSmallPlayerFinished();
+    }
+
+    @Override
+    public void onPlaylistDetailClick(AudioTrack[] track, int index) {
+        Intent intent = new Intent(BaseActivity.this, PlayMedia.class);
+        int[] songIds = new int[track.length];
+        for(int i = 0; i < track.length; i++) {
+            songIds[i] = track[i].getId();
+        }
+        intent.putExtra("songIds", songIds);
+        intent.putExtra("index", index);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onUpdatePlaylist(Playlist playlist) {
+        for(Playlist p : playlists) {
+            if(p.getName().equals(playlist.getName())) {
+                p.setSong_ids(playlist.getSong_ids());
+                p.setNumber_of_songs(playlist.getNumber_of_songs());
+                PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this, playlists);
+            }
+        }
+    }
+
+    @Override
+    public void onSmallPlayerClicked(AudioTrack[] tracks, int index) {
+        Intent intent = new Intent(this, PlayMedia.class);
+        int[] songIds = new int[tracks.length];
+        for(int i = 0; i < tracks.length; i++) {
+            songIds[i] = tracks[i].getId();
+        }
+        intent.putExtra("songIds", songIds);
+        intent.putExtra("index", index);
+        startActivity(intent);
     }
 }

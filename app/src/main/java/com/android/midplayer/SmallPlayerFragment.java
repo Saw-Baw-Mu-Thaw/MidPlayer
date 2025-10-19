@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.v4.media.MediaBrowserCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +29,16 @@ import java.util.List;
 
 public class SmallPlayerFragment extends Fragment{
 
-
+    public interface SmallPlayerListener {
+        public void onSmallPlayerClicked(AudioTrack[] tracks, int index);
+    }
     private List<AudioTrack> tracks;
     private int index;
     private int duration;
     private TextView smallPlayerTextView;
     private ImageButton smallPlayerPlayButton;
     private Context mainActContext;
+    private SmallPlayerListener listener;
 
     private BackgroundPlayerService backgroundPlayerService;
 
@@ -72,6 +76,9 @@ public class SmallPlayerFragment extends Fragment{
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActContext = context;
+        if(context instanceof SmallPlayerListener) {
+            listener = (SmallPlayerListener) context;
+        }
     }
 
     @Override
@@ -106,6 +113,17 @@ public class SmallPlayerFragment extends Fragment{
                         backgroundPlayerService.startPlayer();
                         smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
                     }
+                }
+
+            }
+        });
+
+        smallPlayerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!backgroundPlayerService.isNull() && backgroundPlayerService.isPlaying()) {
+                    AudioTrack[] trackArray = tracks.toArray(new AudioTrack[0]);
+                    listener.onSmallPlayerClicked(trackArray, backgroundPlayerService.getIndex());
                 }
 
             }
