@@ -54,6 +54,16 @@ public class SongsLibrary extends AppCompatActivity implements OnSongClickListen
         trackList.add(new AudioTrack(9, "smile", "scandinavianz", "10/10/2025 10:02 AM", "Rock", "youtube audio library"));
         trackList.add(new AudioTrack(10, "home", "sakura-girl", "10/10/2025 10:02 AM", "Folk", "youtube audio library"));
         trackList.add(new AudioTrack(11, "orange", "next-route", "10/10/2025 10:03 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(12, "thingy-moe", "zaw-paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
+        trackList.add(new AudioTrack(13, "myay-pyant-thu-lay","lay-phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library"));
+        trackList.add(new AudioTrack(14, "ma-sone-thaw-lan","zaw-paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(15, "kabar-a-setset","bunny-phyoe","03/20/2019 9:46 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(16, "roar","katy-perry", "08/10/2013 5:20 PM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(17, "just-the-way-your-are", "bruno-mars", "07/20/2010 6:50 PM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(18,"birds-of-a-feather","billie-eilish", "05/17/2024 7:30 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(19,"believer", "imagine-dragons",  "02/01/2017 10:15 AM", "Rock", "youtube audio library"));
+        trackList.add(new AudioTrack(20,"you-belong-with-me","taylor-swift","04/18/2009 8:45 AM", "Pop", "youtube audio library"));
+        trackList.add(new AudioTrack(21,"die-with-a-smail","lady-gaga-ft-bruno-mars","07/04/2024 9:00 AM", "Pop", "youtube audio library"));
         return trackList;
     }
 
