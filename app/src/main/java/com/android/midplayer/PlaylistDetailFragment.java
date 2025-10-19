@@ -69,7 +69,7 @@ public class PlaylistDetailFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        trackList = SongReaderWriter.readSongsXml(context);
+        trackList = SongsLibrary.getInitialSongList();
         if(context instanceof PlaylistDetailListener) {
             listener = (PlaylistDetailListener) context;
         }
@@ -124,7 +124,7 @@ public class PlaylistDetailFragment extends Fragment {
                 ArrayList<Integer> selectedSongs = new ArrayList<>();
                 for(AudioTrack playlistTrack : playlist.getSong_ids()) {
                     checked[playlistTrack.getId()-1] = true;
-                    selectedSongs.add(playlistTrack.getId()-1);
+                    selectedSongs.add(playlistTrack.getId());
                 }
 
                 String[] songNames = new String[trackList.size()];
@@ -142,11 +142,16 @@ public class PlaylistDetailFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i, boolean isChecked){
                         if(isChecked) {
-                            selectedSongs.add(i);
-                        }else if(selectedSongs.contains(i)){
-                            // remove song
-                            selectedSongs.remove((Integer) i);
+                            selectedSongs.add(i+1);
+                        }else {
+                            int num = i + 1;
+                            selectedSongs.remove((Integer) num);
                         }
+//                        else if(selectedSongs.contains(i+1)){
+//                            // remove song
+//                            int num = i+1;
+//                            selectedSongs.remove((Integer) num);
+//                        }
                     }
                 });
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -154,9 +159,9 @@ public class PlaylistDetailFragment extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int num) {
                         AudioTrack[] tracks = new AudioTrack[selectedSongs.size()];
                         int trackIndex = 0;
-                        for(int i = 1; i <= trackList.size(); i++) {
+                        for(int i = 1; i < trackList.size(); i++) {
                             if(selectedSongs.contains(i)){
-                                tracks[trackIndex] = trackList.get(i);
+                                tracks[trackIndex] = trackList.get(i-1);
                                 trackIndex++;
                             }
                         }

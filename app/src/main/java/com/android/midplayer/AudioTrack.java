@@ -1,6 +1,8 @@
 package com.android.midplayer;
 
-public class AudioTrack {
+import java.io.Serializable;
+
+public class AudioTrack implements Serializable {
     private int id;
     private String title;
     private String artist;
