@@ -13,23 +13,30 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackParameters; // EXO: Use ExoPlayer's parameters
-import com.google.android.exoplayer2.Player; // EXO: Use ExoPlayer's base Player interface
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class PlayMedia extends AppCompatActivity {
+public class SecondPlayerActivity extends AppCompatActivity {
+    // Player activity designed for miniplayer and playlist detail
 
-    // EXO: Changed from MediaPlayer to ExoPlayer
+    public interface SecondPlayerListener {
+        public void onHomeButtonClicked();
+        public void onPlaylistButtonClicked();
+    }
+
     private ExoPlayer exoPlayer;
     private ImageView playPauseButton;
     private ImageView nextSongButton;
@@ -38,8 +45,9 @@ public class PlayMedia extends AppCompatActivity {
     private ImageView musicLibraryButton;
     private SeekBar mediaSeekBar;
 
-    private int currentSongId;
-
+    private int index;
+    private int[] songIds;
+    private int duration;
 
     private Spinner speedSpinner;
     private Handler seekBarHandler = new Handler();
@@ -52,7 +60,7 @@ public class PlayMedia extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_media);
+        setContentView(R.layout.activity_second_player);
 
         songNameMini = findViewById(R.id.songNameMini);
         songNameBig = findViewById(R.id.songNameBig);
@@ -76,7 +84,6 @@ public class PlayMedia extends AppCompatActivity {
         durationTimeText = findViewById(R.id.durationTimeText);
         speedSpinner = (Spinner) findViewById(R.id.speedSelectionSpinner);
 
-        // Spinner setup (no changes)
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.playback_speeds,
@@ -109,50 +116,38 @@ public class PlayMedia extends AppCompatActivity {
             }
         });
 
-        // EXO: Initialize ExoPlayer
         initializePlayer();
+
 
         Intent intent = getIntent();
         if (intent != null) {
-            currentSongId = intent.getIntExtra("SONG_ID", -1);
-            String songTitle = intent.getStringExtra("SONG_TITLE");
-            String artistName = intent.getStringExtra("ARTIST_NAME");
+            index = intent.getIntExtra("index", -1);
+            songIds = intent.getIntArrayExtra("songIds");
+            duration = intent.getIntExtra("duration", -1);
 
-            if (currentSongId != -1) {
-                // This will now play the song AND update the text
-                playSongById(currentSongId);
-
-            } else {
-                // Handle case where activity is launched directly
-                if (songTitle == null) songTitle = "Unknown Title";
-                if (artistName == null) artistName = "Unknown Artist";
-                songNameMini.setText(songTitle);
-                songNameBig.setText(songTitle);
+            if (index != -1 && songIds != null && duration != -1) {
+                // This will continue playing song in miniplayer
+                playSongById(songIds[index], duration);
+            } else if(index != -1 && songIds != null) {
+                // this will play song from playlist detail
+                playSongById(songIds[index]);
             }
-
-            // --- MODIFICATION ---
-            // 5. This setup is now handled by playSongById,
-            //    but we keep it as a fallback if no ID was passed.
-            if (currentSongId == -1) {
-                if (songTitle == null) songTitle = "Unknown Title";
-                songNameMini.setText(songTitle);
-                songNameBig.setText(songTitle);
+            else {
+                // release player and close activity
+                exoPlayer.release();
+                finish();
             }
-            if (currentSongId == -1) {
-                if (songTitle == null) songTitle = "Unknown Title";
-                songNameMini.setText(songTitle);
-                songNameBig.setText(songTitle);
-            }
-
         }
 
-        playPauseButton.setOnClickListener(v -> {
-            // EXO: Simplified play/pause logic. The listener will handle UI updates.
-            if (exoPlayer != null) {
-                if (exoPlayer.isPlaying()) {
-                    exoPlayer.pause();
-                } else {
-                    exoPlayer.play();
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (exoPlayer != null) {
+                    if (exoPlayer.isPlaying()) {
+                        exoPlayer.pause();
+                    } else {
+                        exoPlayer.play();
+                    }
                 }
             }
         });
@@ -179,11 +174,11 @@ public class PlayMedia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (exoPlayer != null) { // EXO: Check exoPlayer
-                    currentSongId++;
-                    if (currentSongId > TOTAL_SONGS) {
-                        currentSongId = 1;
+                    index++;
+                    if (index >= songIds.length) {
+                        index = 0;
                     }
-                    playSongById(currentSongId);
+                    playSongById(songIds[index]);
                 }
             }
         });
@@ -192,11 +187,11 @@ public class PlayMedia extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (exoPlayer != null) { // EXO: Check exoPlayer
-                    currentSongId--;
-                    if (currentSongId == 0) {
-                        currentSongId = TOTAL_SONGS;
+                    index--;
+                    if (index == 0) {
+                        index = songIds.length - 1;
                     }
-                    playSongById(currentSongId);
+                    playSongById(songIds[index]);
                 }
             }
         });
@@ -216,7 +211,6 @@ public class PlayMedia extends AppCompatActivity {
         });
     }
 
-    // EXO: New method to initialize the player and set up its listener
     private void initializePlayer() {
         exoPlayer = new ExoPlayer.Builder(this).build();
         exoPlayer.addListener(new Player.Listener() {
@@ -244,31 +238,51 @@ public class PlayMedia extends AppCompatActivity {
                 if (isPlaying) {
                     playPauseButton.setImageResource(R.drawable.ic_pause);
                     seekBarHandler.postDelayed(updateSeekBar, 1000);
-                    Glide.with(PlayMedia.this)
+                    Glide.with(SecondPlayerActivity.this)
                             .asGif()
                             .load(R.drawable.music_play)
                             .into(musicPlayerGif);
                 } else {
                     playPauseButton.setImageResource(R.drawable.ic_play_arrow);
                     seekBarHandler.removeCallbacks(updateSeekBar);
-                    Glide.with(PlayMedia.this).clear(musicPlayerGif);
+                    Glide.with(SecondPlayerActivity.this).clear(musicPlayerGif);
                 }
             }
         });
     }
 
-    // ADD THIS NEW HELPER METHOD
-    private AudioTrack getTrackById(int songId) {
-        // Loop through your list (which starts at index 0)
-        for (AudioTrack track : allSongs) {
-            // Find the track where the ID matches
-            if (track.getId() == songId) {
-                return track;
+    private String formatDuration(long duration) {
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) -
+                TimeUnit.MINUTES.toSeconds(minutes);
+        return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
+    }
+
+    private Runnable updateSeekBar = new Runnable() {
+        public void run() {
+            // EXO: Check exoPlayer and isPlaying
+            if (exoPlayer != null && exoPlayer.isPlaying()) {
+                long currentPosition = exoPlayer.getCurrentPosition();
+                mediaSeekBar.setProgress((int) currentPosition);
+                currentTimeText.setText(formatDuration(currentPosition));
+                seekBarHandler.postDelayed(this, 1000);
             }
         }
-        // If no song is found (e.g., ID 0 or > 21), return null
-        return null;
+    };
+
+    private void changePlayerSpeed(float speed) {
+        // EXO: Removed the API level check, ExoPlayer handles this
+        try {
+            if (exoPlayer != null) {
+                // EXO: Use ExoPlayer's PlaybackParameters
+                PlaybackParameters params = new PlaybackParameters(speed, 1.0f); // (speed, pitch)
+                exoPlayer.setPlaybackParameters(params);
+            }
+        } catch (Exception e) {
+            Log.e("ExoPlayer", "Failed to set playback speed: " + e.getMessage());
+        }
     }
+
     public void playSongById(int songId) {
         if (exoPlayer == null) {
             initializePlayer();
@@ -315,23 +329,65 @@ public class PlayMedia extends AppCompatActivity {
             songNameBig.setText("Resource Missing");
         }
     }
-    private Runnable updateSeekBar = new Runnable() {
-        public void run() {
-            // EXO: Check exoPlayer and isPlaying
-            if (exoPlayer != null && exoPlayer.isPlaying()) {
-                long currentPosition = exoPlayer.getCurrentPosition();
-                mediaSeekBar.setProgress((int) currentPosition);
-                currentTimeText.setText(formatDuration(currentPosition));
-                seekBarHandler.postDelayed(this, 1000);
+
+    public void playSongById(int songId, int duration) {
+        if (exoPlayer == null) {
+            initializePlayer();
+        }
+
+        // --- MODIFICATION START ---
+        // Use the helper method to get the song's details
+        AudioTrack currentTrack = getTrackById(songId);
+
+        // Check if the track was found
+        if (currentTrack != null) {
+            // Set the text for the new song
+            songNameMini.setText(currentTrack.getTitle());
+            songNameBig.setText(currentTrack.getTitle());
+        } else {
+            // Fallback in case of a bad ID
+            songNameMini.setText("Unknown Title");
+            songNameBig.setText("Unknown Title");
+            Log.e("PlayMedia", "Could not find track with ID: " + songId);
+            // You might want to stop playback here or play song 1
+            return; // Exit if no song found
+        }
+        // --- MODIFICATION END ---
+
+
+        // EXO: Build a URI for the raw resource
+        String resourceName = "song" + songId;
+        int resourceId = getResources().getIdentifier(resourceName, "raw", getPackageName());
+
+        if (resourceId != 0) {
+            Uri mediaUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
+            // EXO: Create a MediaItem
+            MediaItem mediaItem = MediaItem.fromUri(mediaUri);
+
+            // EXO: Set the item, prepare, and play
+            exoPlayer.setMediaItem(mediaItem);
+            exoPlayer.prepare();
+            exoPlayer.seekTo(duration);
+            exoPlayer.play();
+            // All UI updates (duration, button icon) are now handled by the listener
+        } else {
+            Log.e("ExoPlayer", "Raw resource not found for song ID: " + songId);
+            // If the resource isn't found, also update the text
+            songNameMini.setText("Resource Missing");
+            songNameBig.setText("Resource Missing");
+        }
+    }
+
+    private AudioTrack getTrackById(int songId) {
+        // Loop through your list (which starts at index 0)
+        for (AudioTrack track : allSongs) {
+            // Find the track where the ID matches
+            if (track.getId() == songId) {
+                return track;
             }
         }
-    };
-
-    private String formatDuration(long duration) {
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) -
-                TimeUnit.MINUTES.toSeconds(minutes);
-        return String.format(Locale.getDefault(), "%d:%02d", minutes, seconds);
+        // If no song is found (e.g., ID 0 or > 21), return null
+        return null;
     }
 
     @Override
@@ -343,18 +399,5 @@ public class PlayMedia extends AppCompatActivity {
         }
         seekBarHandler.removeCallbacks(updateSeekBar);
         super.onDestroy();
-    }
-
-    private void changePlayerSpeed(float speed) {
-        // EXO: Removed the API level check, ExoPlayer handles this
-        try {
-            if (exoPlayer != null) {
-                // EXO: Use ExoPlayer's PlaybackParameters
-                PlaybackParameters params = new PlaybackParameters(speed, 1.0f); // (speed, pitch)
-                exoPlayer.setPlaybackParameters(params);
-            }
-        } catch (Exception e) {
-            Log.e("ExoPlayer", "Failed to set playback speed: " + e.getMessage());
-        }
     }
 }

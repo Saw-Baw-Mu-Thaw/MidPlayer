@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,11 +16,14 @@
         android:roundIcon="@mipmap/midplayer_ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MidPlayer">
+        <activity
+            android:name=".SecondPlayerActivity"
+            android:exported="false" />
+
         <service
             android:name=".BackgroundPlayerService"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="true">
-        </service>
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback"></service>
 
         <activity
             android:name=".PlayMedia"
@@ -42,16 +45,13 @@
             android:exported="true" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".AccountInfoActivity"
-            android:exported="false"/>
-        <activity android:name=".SearchActivity"
-            android:exported = "false"/>
+            android:exported="false" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false" />
     </application>
-
-
-
-
 
 </manifest>

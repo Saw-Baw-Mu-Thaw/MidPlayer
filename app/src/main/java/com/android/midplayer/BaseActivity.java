@@ -25,7 +25,7 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity implements PlaylistFragment.PlaylistFragListener,
 BackgroundPlayerService.bgPlayerListener, PlaylistDetailFragment.PlaylistDetailListener,
-SmallPlayerFragment.SmallPlayerListener{
+SmallPlayerFragment.SmallPlayerListener, SecondPlayerActivity.SecondPlayerListener {
 
     LinearLayout playlistButton;
     LinearLayout homeButton;
@@ -182,7 +182,7 @@ SmallPlayerFragment.SmallPlayerListener{
 
     @Override
     public void onPlaylistDetailClick(AudioTrack[] track, int index) {
-        Intent intent = new Intent(BaseActivity.this, PlayMedia.class);
+        Intent intent = new Intent(BaseActivity.this, SecondPlayerActivity.class);
         int[] songIds = new int[track.length];
         for(int i = 0; i < track.length; i++) {
             songIds[i] = track[i].getId();
@@ -204,14 +204,29 @@ SmallPlayerFragment.SmallPlayerListener{
     }
 
     @Override
-    public void onSmallPlayerClicked(AudioTrack[] tracks, int index) {
-        Intent intent = new Intent(this, PlayMedia.class);
+    public void onSmallPlayerClicked(AudioTrack[] tracks, int index, int duration) {
+        Intent intent = new Intent(this, SecondPlayerActivity.class);
         int[] songIds = new int[tracks.length];
         for(int i = 0; i < tracks.length; i++) {
             songIds[i] = tracks[i].getId();
         }
         intent.putExtra("songIds", songIds);
         intent.putExtra("index", index);
+        intent.putExtra("duration", index);
         startActivity(intent);
+    }
+
+    @Override
+    public void onHomeButtonClicked() {
+        fragmentManager.beginTransaction()
+                .replace(R.id.baseActivityFragmentContainer, new SongsLibraryFragment())
+                .commit();
+    }
+
+    @Override
+    public void onPlaylistButtonClicked() {
+        fragmentManager.beginTransaction()
+                .replace(R.id.baseActivityFragmentContainer, PlaylistFragment.newInstance(playlists))
+                .commit();
     }
 }

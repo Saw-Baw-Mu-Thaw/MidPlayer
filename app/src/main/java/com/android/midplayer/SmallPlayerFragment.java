@@ -23,7 +23,7 @@ import java.util.List;
 public class SmallPlayerFragment extends Fragment {
 
     public interface SmallPlayerListener {
-        void onSmallPlayerClicked(AudioTrack[] tracks, int index);
+        void onSmallPlayerClicked(AudioTrack[] tracks, int index, int duration);
     }
 
     private List<AudioTrack> tracks;
@@ -88,24 +88,30 @@ public class SmallPlayerFragment extends Fragment {
         Intent intent = new Intent(mainActContext, BackgroundPlayerService.class);
         mainActContext.bindService(intent, connection, Context.BIND_AUTO_CREATE);
 
-        smallPlayerPlayButton.setOnClickListener(v -> {
-            // **FIX**: Added proper null check for the service object
-            if (isBound && backgroundPlayerService != null) {
-                if (backgroundPlayerService.isPlaying()) {
-                    backgroundPlayerService.pausePlayer();
-                    smallPlayerPlayButton.setImageResource(R.drawable.ic_play_arrow);
-                } else {
-                    backgroundPlayerService.startPlayer();
-                    smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
+        smallPlayerPlayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isBound && backgroundPlayerService != null) {
+                    if (backgroundPlayerService.isPlaying()) {
+                        backgroundPlayerService.pausePlayer();
+                        smallPlayerPlayButton.setImageResource(R.drawable.ic_play_arrow);
+                    } else {
+                        backgroundPlayerService.startPlayer();
+                        smallPlayerPlayButton.setImageResource(R.drawable.ic_pause);
+                    }
                 }
             }
         });
 
-        smallPlayerTextView.setOnClickListener(v -> {
-            // **FIX**: Added proper null check for the service object
-            if (isBound && backgroundPlayerService != null && backgroundPlayerService.isPlaying()) {
-                AudioTrack[] trackArray = tracks.toArray(new AudioTrack[0]);
-                listener.onSmallPlayerClicked(trackArray, backgroundPlayerService.getIndex());
+        smallPlayerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isBound && backgroundPlayerService != null && backgroundPlayerService.isPlaying()) {
+                    AudioTrack[] trackArray = tracks.toArray(new AudioTrack[0]);
+                    listener.onSmallPlayerClicked(trackArray, backgroundPlayerService.getIndex(),
+                            backgroundPlayerService.getDuration());
+                    backgroundPlayerService.pausePlayer();
+                }
             }
         });
     }

@@ -29,13 +29,13 @@ public class PlaylistReaderWriter {
     public static void savePlaylistsToXml(Context context) {
         myPlaylists = new ArrayList<>();
         AudioTrack[] songs = new AudioTrack[] {
-                (new AudioTrack(12, "thingy-moe", "zaw-paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library")),
-                (new AudioTrack(13, "myay-pyant-thu-lay","lay-phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library")),
-                (new AudioTrack(14, "ma-sone-thaw-lan","zaw-paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library")),
-                (new AudioTrack(15, "kabar-a-setset","bunny-phyoe","03/20/2019 9:46 AM", "Pop", "youtube audio library")),
-                (new AudioTrack(16, "roar","katy-perry", "08/10/2013 5:20 PM", "Pop", "youtube audio library")),
+                new AudioTrack(1, "Thingyan Moe", "Zaw Paing", "09/10/2001 9:00 AM", "Rock", "youtube audio library"),
+                new AudioTrack(2, "Myay Pyant Thu Lay","Lay Phyu", "09/10/2001 9:00 AM", "Rock", "youtube audio library"),
+                new AudioTrack(3, "Ma Sone Thaw Lan","Zaw Paing", "06/22/2012 10:30 AM", "Pop", "youtube audio library"),
+                new AudioTrack(4, "Kabar A Setset","Bunny Phyoe","03/20/2019 9:46 AM", "Pop", "youtube audio library"),
+                new AudioTrack(5, "Roar","Katy Perry", "08/10/2013 5:20 PM", "Pop", "youtube audio library")
             };
-        myPlaylists.add(new Playlist("Playlist 1", 2,songs));
+        myPlaylists.add(new Playlist("Playlist 1", songs.length,songs));
 
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
