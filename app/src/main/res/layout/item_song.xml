@@ -4,35 +4,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
     app:cardCornerRadius="8dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginLeft="5dp">
+    app:cardElevation="4dp">  <!-- CHANGE: Added elevation for the shadow effect -->
 
-    <LinearLayout
+    <!-- CHANGE: Using a RelativeLayout to easily position the icon to the far right -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/text_view_title"
+        <!-- This LinearLayout holds the text, same as before -->
+        <LinearLayout
+            android:id="@+id/song_info_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Song Title Placeholder"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/image_view_options"> <!-- Ensures text doesn't go under the icon -->
 
-        <TextView
-            android:id="@+id/text_view_artist"
+            <TextView
+                android:id="@+id/text_view_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Song Title Placeholder"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/text_view_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Artist Name Placeholder"
+                android:textSize="16sp"
+                android:textColor="@android:color/darker_gray"/>
+
+        </LinearLayout>
+
+        <!-- CHANGE: Added an ImageView for the three-dot options icon -->
+        <ImageView
+            android:id="@+id/image_view_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Artist Name Placeholder"
-            android:textSize="20sp"
-            android:textColor="@color/black"/>
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_more_vert"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@android:color/darker_gray" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
