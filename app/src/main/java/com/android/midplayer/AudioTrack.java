@@ -8,6 +8,18 @@ public class AudioTrack {
     private String genre;
     private String source;
 
+    private boolean isFavorite = false;
+
+    public AudioTrack(int id, String title, String artist, String dateAdded, String genre, String source, boolean isFavorite) {
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.dateAdded = dateAdded;
+        this.genre = genre;
+        this.source = source;
+        this.isFavorite = isFavorite;
+    }
+
     public AudioTrack(int id, String title, String artist, String dateAdded, String genre, String source) {
         this.id = id;
         this.title = title;
@@ -44,6 +56,14 @@ public class AudioTrack {
     @Override
     public String toString() {
         return "AudioTrack{id=" + id + ", title='" + title + "', artist='" + artist + "', genre='" + genre + "'}";
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }
 
