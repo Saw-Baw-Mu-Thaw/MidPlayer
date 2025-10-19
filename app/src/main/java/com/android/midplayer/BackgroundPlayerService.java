@@ -1,36 +1,33 @@
 package com.android.midplayer;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.media.MediaPlayer;
-import android.media.midi.MidiDeviceService;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.media.MediaBrowserCompat;
-import android.util.Log;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.app.ServiceCompat;
-import androidx.media.MediaBrowserServiceCompat;
 
 import java.util.List;
-
-import kotlin._Assertions;
 
 public class BackgroundPlayerService extends Service {
 
     public interface bgPlayerListener {
-        public void onPlay(String trackName);
-        public void onFinish();
+        void onPlay(String trackName);
+        void onFinish();
     }
 
     private final IBinder myBinder = new MyBinder();
@@ -40,150 +37,138 @@ public class BackgroundPlayerService extends Service {
     private bgPlayerListener listener;
 
     private final String CHANNEL_ID = "BackgroundPlayerService";
-
-    public BackgroundPlayerService() {
-    }
+    private final int NOTIFICATION_ID = 1133;
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         return myBinder;
     }
 
-
-    public void playSongs(List<AudioTrack> tracks) {
-        index = 0;
-        this.tracks = tracks;
-        String id = "song" + tracks.get(index).getId();
-        int resourceId = getResources().getIdentifier(id, "raw", getPackageName());
-        Uri trackUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
-
+    private void initializeMediaPlayer() {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
-            try {
-                mediaPlayer.setDataSource(BackgroundPlayerService.this, trackUri);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    if(index+1 < tracks.size()) {
-                        index++;
-                        String id = "song" + tracks.get(index).getId();
-                        int resourceId = getResources().getIdentifier(id, "raw", getPackageName());
-                        Uri trackUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
-                        mediaPlayer.reset();
-                        try {
-                            mediaPlayer.setDataSource(BackgroundPlayerService.this, trackUri);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        mediaPlayer.prepareAsync();
-                    }
-                    else {
-                        mediaPlayer.release();
-                        mediaPlayer = null;
+
+            mediaPlayer.setOnCompletionListener(mp -> {
+                if (index + 1 < tracks.size()) {
+                    index++;
+                    playTrackAtIndex(); // Play the next track in the list
+                } else {
+                    if (listener != null) {
                         listener.onFinish();
                     }
-
+                    // Consider stopping the service or just releasing the player
+                    stopSelf();
                 }
             });
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
+
+            mediaPlayer.setOnPreparedListener(mp -> {
+                if (listener != null) {
                     listener.onPlay(tracks.get(index).getTitle());
-                    mediaPlayer.start();
                 }
+                mp.start();
             });
-
-            mediaPlayer.prepareAsync();
+        } else {
+            mediaPlayer.reset();
         }
+    }
+
+    private void playTrackAtIndex() {
+        if (tracks == null || index < 0 || index >= tracks.size() || mediaPlayer == null) {
+            return;
+        }
+        try {
+            String id = "song" + tracks.get(index).getId();
+            int resourceId = getResources().getIdentifier(id, "raw", getPackageName());
+            if (resourceId == 0) return; // Resource not found
+            Uri trackUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
+            mediaPlayer.setDataSource(getApplicationContext(), trackUri);
+            mediaPlayer.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void playSongs(List<AudioTrack> tracks) {
+        this.tracks = tracks;
+        this.index = 0;
+        initializeMediaPlayer();
+        playTrackAtIndex();
     }
 
     public void playSongs(List<AudioTrack> t, int i, int duration) {
-        index = i;
         this.tracks = t;
-        String id = "song" + this.tracks.get(index).getId();
-        int resourceId = getResources().getIdentifier(id, "raw", getPackageName());
-        Uri trackUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
+        this.index = i;
+        initializeMediaPlayer();
 
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-            try {
-                mediaPlayer.setDataSource(BackgroundPlayerService.this, trackUri);
-            } catch (Exception e) {
-                e.printStackTrace();
+        // Overwrite the onPrepared listener to handle seekTo
+        mediaPlayer.setOnPreparedListener(mp -> {
+            if (listener != null) {
+                listener.onPlay(tracks.get(index).getTitle());
             }
-            mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    if (index + 1 < tracks.size()) {
-                        index++;
-                        String id = "song" + tracks.get(index).getId();
-                        int resourceId = getResources().getIdentifier(id, "raw", getPackageName());
-                        Uri trackUri = Uri.parse("android.resource://" + getPackageName() + "/" + resourceId);
-                        mediaPlayer.reset();
-                        try {
-                            mediaPlayer.setDataSource(BackgroundPlayerService.this, trackUri);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        mediaPlayer.prepareAsync();
-                    } else {
-                        mediaPlayer.release();
-                        mediaPlayer = null;
-                        listener.onFinish();
-                    }
+            mp.seekTo(duration);
+            mp.start();
+        });
 
-                }
-            });
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    listener.onPlay(tracks.get(index).getTitle());
-                    mediaPlayer.seekTo(duration);
-                    mediaPlayer.start();
-                }
-            });
-
-            mediaPlayer.prepareAsync();
-        }
+        playTrackAtIndex();
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        createNotificationChannel();
+        Notification n = createNotification();
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getApplicationContext(), "Notification permission not granted", Toast.LENGTH_SHORT).show();
+            return START_STICKY;
+        }
+
+        ServiceCompat.startForeground(this,
+                NOTIFICATION_ID,
+                n,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onDestroy();
+    }
+
+    // --- Player Control Methods ---
     public void pausePlayer() {
-        mediaPlayer.pause();
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+        stopForeground(false); // Stop being a foreground service, but don't remove notification yet
     }
 
     public void startPlayer() {
-        mediaPlayer.start();
+        if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+            startForeground(NOTIFICATION_ID, createNotification());
+        }
     }
 
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        return mediaPlayer != null && mediaPlayer.isPlaying();
     }
 
-    public boolean isNull() { return mediaPlayer == null; }
+    public int getIndex() { return index; }
+    public int getDuration() { return mediaPlayer != null ? mediaPlayer.getCurrentPosition() : 0; }
+    public List<AudioTrack> getPlaylist() { return tracks; }
 
-    public int getIndex() {
-        return index;
-    }
 
-    public int getDuration() {
-        return mediaPlayer.getDuration();
-    }
-
-    public List<AudioTrack> getPlaylist() {
-        return tracks;
-    }
-
+    // --- Listener and Binder ---
     public void setListener(Context context) {
-        if(listener != null) {
-            listener = null;
-        }
         if(context instanceof bgPlayerListener) {
             listener = (bgPlayerListener) context;
         }
@@ -194,17 +179,26 @@ public class BackgroundPlayerService extends Service {
     }
 
     public class MyBinder extends Binder {
-        BackgroundPlayerService getService(){
+        BackgroundPlayerService getService() {
             return BackgroundPlayerService.this;
         }
     }
 
-    @Override
-    public boolean stopService(Intent name) {
-        if(mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-        return super.stopService(name);
+
+    // --- Notification Methods ---
+    public void createNotificationChannel() {
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "MidPlayer", NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("MidPlayer app is playing music");
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    public Notification createNotification() {
+        return new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle("MidPlayer")
+                .setContentText("Playing Music")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build();
     }
 }

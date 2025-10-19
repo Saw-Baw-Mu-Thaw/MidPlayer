@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,14 +27,14 @@ public class BaseActivity extends AppCompatActivity implements PlaylistFragment.
 BackgroundPlayerService.bgPlayerListener, PlaylistDetailFragment.PlaylistDetailListener,
 SmallPlayerFragment.SmallPlayerListener{
 
-    ImageView playlistButton;
-    ImageView homeButton;
+    LinearLayout playlistButton;
+    LinearLayout homeButton;
     FragmentManager fragmentManager;
     List<Playlist> playlists;
     SmallPlayerFragment smallPlayerFragment;
 
     //account info
-    ImageView ivAccount;
+    CardView ivAccount;
     String username, email;
     public static boolean isDarkMode = false;
 
@@ -62,9 +64,9 @@ SmallPlayerFragment.SmallPlayerListener{
 
         fragmentManager = getSupportFragmentManager();
 
-        smallPlayerFragment = SmallPlayerFragment.newInstance();
+        smallPlayerFragment = new SmallPlayerFragment();
         fragmentManager.beginTransaction()
-                .replace(R.id.baseActivitySmallPlayerFragmentContainer, SmallPlayerFragment.newInstance())
+                .replace(R.id.baseActivitySmallPlayerFragmentContainer, smallPlayerFragment)
                 .commit();
 
 
