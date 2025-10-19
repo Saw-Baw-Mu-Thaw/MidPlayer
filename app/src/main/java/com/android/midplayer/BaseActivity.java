@@ -33,6 +33,7 @@ SmallPlayerFragment.SmallPlayerListener{
     List<Playlist> playlists;
     SmallPlayerFragment smallPlayerFragment;
 
+    private ImageView searchSong;
     //account info
     CardView ivAccount;
     String username, email;
@@ -57,6 +58,17 @@ SmallPlayerFragment.SmallPlayerListener{
             PlaylistReaderWriter.savePlaylistsToXml(BaseActivity.this);
             playlists = PlaylistReaderWriter.getPlaylists();
         }
+
+        searchSong = findViewById(R.id.searchSong);
+        searchSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BaseActivity.this, "Search Clicked", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(BaseActivity.this, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // setting up playlist fragment
         playlistButton = findViewById(R.id.musicLibrary);
