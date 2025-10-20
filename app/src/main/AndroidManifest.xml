@@ -41,9 +41,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SongsLibrary"
-            android:exported="true" />
-        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
