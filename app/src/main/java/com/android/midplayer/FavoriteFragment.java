@@ -59,10 +59,14 @@ public class FavoriteFragment extends Fragment implements FavoriteSongAdapter.On
     public void onSongClick(AudioTrack audioTrack, int position) {
         if (getActivity() == null) return;
 
-        Intent playerIntent = new Intent(getActivity(), PlayMedia.class);
+        Intent playerIntent = new Intent(getActivity(), SecondPlayerActivity.class);
         // We pass the fragment's current list of favorite songs
-        playerIntent.putExtra("SONG_LIST", (Serializable) favoriteSongs);
-        playerIntent.putExtra("CURRENT_SONG_POSITION", position);
+        int[] songIds = new int[favoriteSongs.size()];
+        for(int i = 0; i < favoriteSongs.size(); i++) {
+            songIds[i] = favoriteSongs.get(i).getId();
+        }
+        playerIntent.putExtra("songIds", songIds);
+        playerIntent.putExtra("index", position);
         startActivity(playerIntent);
     }
 
@@ -74,7 +78,6 @@ public class FavoriteFragment extends Fragment implements FavoriteSongAdapter.On
 
 
         favoriteSongs.remove(position);
-
 
         favoriteSongAdapter.notifyItemRemoved(position);
     }
